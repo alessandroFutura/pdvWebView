@@ -1,0 +1,78 @@
+.shadow
+{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    opacity: 0;    
+    display: none;
+    position: fixed;
+    transition: all .3s ease;
+    background-color: rgba(0,0,0,.5);
+}
+
+.shadow .modal
+{
+    
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 800px;
+    height: 600px;
+    position: absolute;
+    background-color: #fff;
+}
+
+.shadow .modal .header
+{
+    color: #fff;
+    padding: 20px;    
+    text-transform: uppercase;
+    background-color: #4caf50;    
+}
+
+.shadow .modal .header button
+{
+    top: 0;
+    right: 0;
+    width: 61px;
+    height: 61px;
+    float: right;
+    border: none;
+    color: #fff;
+    padding: 18px;
+    cursor: pointer;
+    font-size: 24px;
+    position: absolute; 
+    background-color: transparent;    
+}
+
+.shadow .modal .body
+{
+    left: 0;
+    right: 0;
+    top: 60px;
+    bottom: 60px;
+    padding: 20px;
+    overflow-y: auto;
+    position: absolute;    
+}
+
+.shadow .modal .footer
+{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    padding: 20px;
+    position: absolute;
+    border-top: 1px solid #ddd;
+}
+
+.shadow .modal .footer button
+{
+    
+}

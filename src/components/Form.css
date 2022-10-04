@@ -1,0 +1,72 @@
+.container .form
+{
+    top: 0;
+    margin: auto;
+    height: 718px;
+    bottom: 194px;
+    position: absolute;
+}
+
+.container .form .content
+{
+    width: 464px;
+}
+
+.container .form .content .logo
+{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .form .content .logo .image
+{
+    width: 228px;
+    height: 128px;
+    margin: 25px 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(../assets/logo.png);
+}
+
+.container .form .content .total-value
+{
+    width: 100%;
+    color: #fff;
+    height: 44px;
+    outline: none;
+    display: flex;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #00a468;
+    background-color: #00a468;
+}
+
+.container .form .content .product-image
+{
+    width: 168px;
+    height: 168px;
+    margin: 18px 0;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    background-color: #434343;
+    background-image: url(../assets/empty.png);
+}
+
+.container .form .content label
+{
+    color: #fff;
+}
+
+.container .form .content input
+{
+    color: #fff;
+    border: 2px solid #00a468;
+    background-color: #292929;
+}

@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './style/index.css';
-import Pdv from './pages/checkout';
+
+import App from './App';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Pdv/>
+    <App/>
   </React.StrictMode>
 );
 
