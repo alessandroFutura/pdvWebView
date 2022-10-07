@@ -1,0 +1,51 @@
+.budget
+{
+    top: 0;
+    right: 0;
+    z-index: 1;
+    width: 486px;
+    bottom: -100px;
+    position: absolute;
+}
+
+.budget .content,
+.budget .gary-gary
+{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-left: 40px;
+    position: absolute;
+}
+
+.budget .gary-gary
+{
+    background-color: rgba(255,255,255, .5);
+}
+
+.budget .gary-gary:nth-child(1)
+{
+    transform: rotate(3deg);
+}
+
+.budget .gary-gary:nth-child(2)
+{
+    transform: rotate(-3deg);
+}
+
+.budget .content
+{
+    background-color: #fff;
+}
+
+.budget .content .empty
+{
+    top: 0;
+    bottom: 0;
+    height: 140px;
+    font-size: 32px;
+    margin: auto 88px;
+    position: absolute;
+    text-align: center;
+}

@@ -1,0 +1,33 @@
+.tabs
+{
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    width: 714px;
+    position: absolute;
+}
+
+.tabs button.btn
+{
+    color: #333;
+    padding: 12px;
+    font-weight: bold;
+    position: absolute;
+    background-color: #fff;
+}
+
+.tabs button.btn:nth-child(2)
+{
+    margin-left: 78px;
+}
+
+.tabs .tab
+{
+    left: 0;
+    right: 0;
+    top: 38px;
+    bottom: 0;
+    position: absolute;
+    border-radius: 0 8px 8px;
+    background-color: #fff;
+}

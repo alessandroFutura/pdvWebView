@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext}  from "react";
+import Context from '../contexts/Context.js';
 
 import "./Company.css";
 
-const Company = ({company}) => {
+const Company = () => {
     
+    const {company} = useContext(Context);
+
     return (
         <div className="company">
             <div className="content">

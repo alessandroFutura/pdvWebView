@@ -28,6 +28,7 @@
 
 .shadow .modal .header
 {
+    height: 60px;
     color: #fff;
     padding: 20px;    
     text-transform: uppercase;

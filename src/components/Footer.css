@@ -1,0 +1,31 @@
+.footer
+{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 40px 0;
+    position: absolute;
+}
+
+.footer .user .user-image,
+.footer .company .company-image
+{
+    width: 64px;
+    float: left;
+    height: 64px;
+    border-radius: 4px;
+    background-size: cover;
+    background-color: #434343;
+    background-position: center;
+    background-image: url(../assets/empty.png);
+}
+
+.footer .user .user-name,
+.footer .company .company-name
+{
+    float: left;
+    margin: 18px;
+    color: #e6e6e6;
+    font-size: 20px;
+    font-weight: bold;
+}

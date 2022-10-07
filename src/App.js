@@ -1,54 +1,143 @@
 import React, {useEffect, useState} from "react";
+
+import moment from 'moment';
+import {Modal} from 'rsuite';
 import Api from './ServiceApi.js';
+import Context from './contexts/Context.js'
+
+// import Bar from './components/Bar.js';
+// import Form from './components/Form.js';
+// import Modal from "./components/Modal.js";
+// import Right from './components/Right.js';
+// import Company from './components/Company.js';
+import Header from './components/Header.js';
+import Tabs from './components/Tabs.js';
+import Budget from './components/Budget.js';
+import Bar from './components/Bar.js';
+import Footer from './components/Footer.js';
+import Loading from "./components/Loading.js";
+import ModalMessage from "./components/modal/ModalMessage.js";
 
 import './App.css';
-
-import Modal from "./modal/Modal.js";
-import Bar from './components/Bar.js';
-import Form from './components/Form.js';
-import Right from './components/Right.js';
-import Company from './components/Company.js';
 
 const App = () => {    
     
     useEffect(() => {
         getUser();
+        setInterval(function(){
+            setTime(moment().format('HH:mm'));
+        },1000)
     },[]);
+
+    const [user, setUser] = useState({
+        image: null,
+        user_id: null,
+        user_name: '',
+        access: {},
+        companies: []
+    });
+
+    const [company, setCompany] = useState({
+        image: null,
+        company_id: null,
+        company_code: null,
+        company_name: '',
+        company_color: null
+    });
+
+    const [budget, setBudget] = useState({
+        
+    });
     
-    const [user, setUser] = useState({});
-    const [budget, setBudget] = useState({});
-    const [loading, setLoading] = useState(0);
-    const [company, setCompany] = useState({});
-    const [modalData, setModalData] = useState({});
-    const [modalStyle, setModalStyle] = useState({});   
+    const [budgets, setBudgets] = useState([]);
+
+    const [modalMessage, setModalMessage] = useState({
+        title: '',
+        message: '',
+        opened: false
+    });
+    
+    const [loading, setLoading] = useState(0);    
+    // const [modalData, setModalData] = useState({});
+    const [loadingStyle, setLoadingStyle] = useState({});
+
+    const [time, setTime] = useState(moment().format('HH:mm'));
+    const [dtReferencia, setDtReferencia] = useState(new Date());
+
+    useEffect(() => {
+        showLoading();
+    }, [loading]);
+
+    useEffect(() => {
+        if(!!company.company_id){
+            getBudgets();
+        }
+    }, [company]);
 
     const getUser = () => {
-        setLoading(loading+1);
+        setLoading(loading => loading+1);
         Api.post({script: 'user', action: 'get'}).then((res) => {
-            setLoading(loading-1);
-            setUser(res.data);
-            setCompany(res.data.companies.filter(function(company){
-                return company.user_company_main === 'Y';
-            })[0]);
+            if(res.status == 200){
+                setUser(res.data);
+                setCompany(res.data.companies.filter(function(company){
+                    return company.user_company_main === 'Y';
+                })[0]);
+            } else {
+                setModalMessage({
+                    title: 'Atenção!',
+                    message: 'Resposta inesperada do servidor.',
+                    opened: true
+                });
+            }
+            setLoading(loading => loading-1);   
         });
     };
 
-    const showModal = () => {
-        setModalStyle({
-            zIndex: 1,
-            opacity: 1,
-            display: 'block'
+    const getBudgets = () => {
+        setLoading(loading => loading+1);
+        Api.post({script: 'budget', action: 'getList', data: {
+            company_id: company.company_id,
+            reference: moment(dtReferencia).format('YYYY-MM-DD')
+        }}).then((res) => {
+            if(res.status == 200){
+                setBudgets(res.data);                
+            } else {
+                setModalMessage({
+                    title: 'Atenção!',
+                    message: 'Resposta inesperada do servidor.',
+                    opened: true
+                })
+            }
+            setLoading(loading => loading-1);
+        });
+    };
+
+    const showLoading = () => {        
+        setLoadingStyle({
+            display: loading > 0 ? 'block' : 'none'
         }); 
     };
 
     return (
-        <div className="container">
-            <Modal modalData={modalData} modalStyle={modalStyle} setModalStyle={setModalStyle}/>
-            <Form />
-            <Bar showModal={showModal} setModalData={setModalData}/>
-            <Company company={company}/>
-            <Right />
-        </div>
+        <Context.Provider value={{
+            time,
+            user,
+            budget,
+            budgets,
+            company, setCompany, 
+            dtReferencia, setDtReferencia,
+            modalMessage, setModalMessage
+        }}>
+            <Header/>
+            <div className="body">
+                <Tabs/>
+                <Budget/>
+            </div>
+            <Bar/>
+            <Footer/>
+            <ModalMessage/>
+            <Loading loadingStyle={loadingStyle}/>
+        </Context.Provider>
     );
 };
 
