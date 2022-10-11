@@ -2,20 +2,17 @@ import React, {useContext} from "react";
 
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import pt from 'date-fns/locale/pt';
-import { SelectPicker } from 'rsuite';
+
 import Context from '../contexts/Context.js';
-import DatePicker, { registerLocale } from "react-datepicker";
+
+import {SelectPicker, DatePicker, Stack} from 'rsuite';
 
 import "./Header.css";
 import 'rsuite/dist/rsuite.min.css';
-import "react-datepicker/dist/react-datepicker.css";
-
-registerLocale('pt', pt);
 
 const Header = () => {
     
-    const {time, user, company, setCompany, dtReferencia, setDtReferencia} = useContext(Context);
+    const {time, user, company, setCompany, setDtReferencia} = useContext(Context);
 
     const data = user.companies.map(
         item => ({label: `${item.company_code} - ${item.company_name.toUpperCase()}`, value: item.company_id})
@@ -27,12 +24,14 @@ const Header = () => {
                 <div className="logo"></div>
                 <div className="reference">
                     <label>DATA</label>
-                    <DatePicker 
-                        locale="pt" 
-                        dateFormat="dd/MM/yyyy" 
-                        selected={dtReferencia}
-                        onChange={(date) => setDtReferencia(date)} 
-                    />
+                    <Stack direction="column" alignItems="flex-start" spacing={6}>
+                        <DatePicker 
+                            cleanable={false}
+                            format="dd/MM/yyyy"
+                            defaultValue={new Date()}
+                            onChange={(date) => setDtReferencia(date)}
+                        />
+                    </Stack>
                 </div>
                 <div className="companies">
                     <label>EMPRESA</label>

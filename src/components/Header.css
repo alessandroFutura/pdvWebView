@@ -39,15 +39,34 @@
 
 .header .container .reference
 {
-    width: 130px;
+    width: 158px;
 }
 
-.header .container .reference input,
-.header .container .companies .rs-picker-toggle
+.header .container .reference div[role="combobox"]
+{
+    width: 154px;
+    font-size: 16px;
+    padding: 12px 32px 11px 12px
+}
+
+.header .container .companies .rs-picker-toggle,
+.header .container .reference div[role="combobox"]
 {
     border-radius: 4px;
     border: 1px solid #419744;
     background-color: #333 !important;
+}
+
+.header .container .reference div[role="combobox"] span
+{
+    color: #fff;
+    text-align: center;
+}
+
+.rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-caret, 
+.rs-picker-default .rs-picker-toggle.rs-btn .rs-picker-toggle-clean
+{
+    top: 12px !important;
 }
 
 .header .container .reference input
@@ -55,8 +74,8 @@
     width: 128px;
     color: #fff;
     padding: 10px;
-    font-size: 16px;
-    text-align: center;
+    font-size: 16px;    
+    background-color: #333 !important;
 }
 
 .header .container .companies

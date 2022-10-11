@@ -1,32 +1,66 @@
-import React, { useState } from 'react';
-import { ITableProps, kaReducer, Table } from 'ka-table';
-import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
-import { DispatchFunc } from 'ka-table/types';
+import React from 'react';
 
-import "ka-table/style.css";
+import {Table} from 'rsuite';
 
-const DataGrid = ({columns, dataArray}) => {
+import "./DataGrid.css";
 
-  const tablePropsInit: ITableProps = {
-    columns: columns,
-    data: dataArray,
-    editingMode: false,
-    rowKeyField: 'id',
-    sortingMode: SortingMode.Single,
-  };
-  
-  const [tableProps, changeTableProps] = useState(tablePropsInit);
+const {Column, HeaderCell, Cell} = Table;
 
-  const dispatch: DispatchFunc = (action) => {
-    changeTableProps((prevState: ITableProps) => kaReducer(prevState, action));
-  };
+const DataGrid = ({dataColumns, dataRows, setDataRow}) => {
 
-  return (
-    <Table
-      {...tableProps}
-      dispatch={dispatch}
-    />
-  );
-};
+	const [sortType, setSortType] = React.useState();
+	const [sortColumn, setSortColumn] = React.useState();
+
+	const getData = () => {
+		if(sortColumn && sortType){
+			return dataRows.sort((a, b) => {
+				let x = a[sortColumn];
+				let y = b[sortColumn];
+				if(typeof x === 'string'){
+					x = x.charCodeAt();
+				}
+				if(typeof y === 'string'){
+					y = y.charCodeAt();
+				}
+				if(sortType === 'asc'){
+					return x - y;
+				} else {
+					return y - x;
+				}
+			});
+		}
+		return dataRows;
+	};
+
+	const handleSortColumn = (sortColumn, sortType) => {
+		setSortColumn(sortColumn);
+		setSortType(sortType);
+	};
+
+	const handleRowClick = (data) => {
+		setDataRow(data);
+	};
+
+	return (
+		<Table
+			height={558}
+			data={getData()}
+			sortColumn={sortColumn}
+			sortType={sortType}
+			onSortColumn={handleSortColumn}
+			onRowClick={rowData => {
+				handleRowClick(rowData);
+			}}
+		>
+			{(dataColumns || []).map((column, key) => (
+				<Column key={key} flexGrow={1} align="center" fixed sortable>
+					<HeaderCell>{column.HeaderCell}</HeaderCell>
+					<Cell dataKey={column.dataKey} />
+				</Column>
+			))}		  
+		</Table>
+	  );
+
+}
 
 export default DataGrid;

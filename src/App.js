@@ -29,6 +29,14 @@ const App = () => {
         },1000)
     },[]);
 
+    const apiError = () => {
+        setModalMessage({
+            title: 'Atenção!',
+            message: 'Resposta inesperada do servidor.',
+            opened: true
+        });
+    }
+
     const [user, setUser] = useState({
         image: null,
         user_id: null,
@@ -45,11 +53,9 @@ const App = () => {
         company_color: null
     });
 
-    const [budget, setBudget] = useState({
-        
-    });
-    
+    const [budget, setBudget] = useState({});
     const [budgets, setBudgets] = useState([]);
+    const [budget_id, setBudgetId] = useState(null);
 
     const [modalMessage, setModalMessage] = useState({
         title: '',
@@ -74,22 +80,44 @@ const App = () => {
         }
     }, [company]);
 
+    useEffect(() => {
+        if(!!company.company_id){
+            getBudgets();
+        }
+    }, [dtReferencia]);
+
+    useEffect(() => {
+        if(!!budget_id){
+            getBudget();
+        }
+    }, [budget_id]);
+
     const getUser = () => {
         setLoading(loading => loading+1);
         Api.post({script: 'user', action: 'get'}).then((res) => {
-            if(res.status == 200){
+            if(res.status === 200){
                 setUser(res.data);
                 setCompany(res.data.companies.filter(function(company){
                     return company.user_company_main === 'Y';
                 })[0]);
             } else {
-                setModalMessage({
-                    title: 'Atenção!',
-                    message: 'Resposta inesperada do servidor.',
-                    opened: true
-                });
+                apiError();
             }
             setLoading(loading => loading-1);   
+        });
+    };
+
+    const getBudget = () => {
+        setLoading(loading => loading+1);
+        Api.post({script: 'budget', action: 'get', data: {
+            budget_id: budget_id
+        }}).then((res) => {
+            if(res.status === 200){
+                setBudget(res.data);                
+            } else {
+                apiError();
+            }
+            setLoading(loading => loading-1);
         });
     };
 
@@ -99,8 +127,8 @@ const App = () => {
             company_id: company.company_id,
             reference: moment(dtReferencia).format('YYYY-MM-DD')
         }}).then((res) => {
-            if(res.status == 200){
-                setBudgets(res.data);                
+            if(res.status === 200){
+                setBudgets(res.data);
             } else {
                 setModalMessage({
                     title: 'Atenção!',
@@ -125,8 +153,9 @@ const App = () => {
             budget,
             budgets,
             company, setCompany, 
+            budget_id, setBudgetId,
             dtReferencia, setDtReferencia,
-            modalMessage, setModalMessage
+            modalMessage, setModalMessage,
         }}>
             <Header/>
             <div className="body">
@@ -135,6 +164,7 @@ const App = () => {
             </div>
             <Bar/>
             <Footer/>
+            <Modal/>
             <ModalMessage/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>

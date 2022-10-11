@@ -9,8 +9,8 @@ const user_session_value = parsed.user_session_value;
 const numberFormat = (params) => {
     let options = {
         locale: 'pt-BR',
-        minimumFractionDigits: (typeof params.minDecimals == 'undefined' ? 2 : params.minDecimals),
-        maximumFractionDigits: (typeof params.maxDecimals == 'undefined' ? 2 : params.maxDecimals)
+        minimumFractionDigits: (typeof params.minDecimals === 'undefined' ? 2 : params.minDecimals),
+        maximumFractionDigits: (typeof params.maxDecimals === 'undefined' ? 2 : params.maxDecimals)
     };
     if(!!params.style){
         options.style = params.style;
@@ -18,7 +18,7 @@ const numberFormat = (params) => {
     if(!!params.currency){
         options.currency = params.currency;
     }
-    if(params.style == 'percent'){
+    if(params.style === 'percent'){
         params.value = parseFloat(params.value || 0)/100;
     }
     return parseFloat(params.value).toLocaleString((params.locale || 'pt-BR'), options);

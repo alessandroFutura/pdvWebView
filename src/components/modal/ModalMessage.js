@@ -1,5 +1,5 @@
 import React, {useContext}  from "react";
-import {Modal, Button, Placeholder} from 'rsuite';
+import {Modal, Button} from 'rsuite';
 
 import Context from '../../contexts/Context.js';
 

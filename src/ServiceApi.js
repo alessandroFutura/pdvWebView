@@ -13,7 +13,7 @@ class ServiceApi {
             'Content-Type': 'application/x-www-form-urlencoded'
         }}).then((res) => {
            return res;
-        }).catch((res) => {
+        }).catch((res) => {console.log(res);
             res.status = res.response.status;
             res.statusText = res.response.statusText;
             this.error(params.data || null, res.response.data);

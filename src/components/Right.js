@@ -1,8 +1,13 @@
 import React from "react";
 
+import Context from '../contexts/Context.js';
+
 import "./Right.css";
 
 const Right = () => {
+    
+    const {budget} = useContext(Context);
+
     return (
         <div className="right">
             <div className="print"></div>
