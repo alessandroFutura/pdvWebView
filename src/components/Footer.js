@@ -18,7 +18,7 @@ const Footer = () => {
                 <div className="user">
                     <div className="user-image" style={{backgroundImage: `url(${user.image})`}}></div>
                     <div className="user-name">{user.user_name.toUpperCase()}</div>
-                </div>
+                </div>                
             </div>
         </div>
     );

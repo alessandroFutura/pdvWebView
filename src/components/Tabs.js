@@ -6,7 +6,7 @@ import {numberFormat} from '../contexts/Global.js';
 
 import "./Tabs.css";
 
-const Tabs = () => {
+const Tabs = ({initBudget}) => {
     
     const [tab, setTab] = useState(1);
     const [styleButton1, setStyleButton1] = useState({zIndex:2});
@@ -28,6 +28,7 @@ const Tabs = () => {
     const {budgets, setBudgetId} = useContext(Context);
 
     useEffect(() => {
+        initBudget();
         setStyleButton1({zIndex: tab === 1 ? 2 : 0});
         setStyleButton2({zIndex: tab === 2 ? 2 : 0});
         setStyleTab1(tab === 1 ? {display:'block', zIndex:1, opacity:1} : {display:'none', zIndex:0, opacity:0});

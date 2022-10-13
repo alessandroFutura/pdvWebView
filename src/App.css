@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+
 *
 {
     box-sizing: border-box;
@@ -11,7 +13,7 @@ body
     background-repeat: repeat;
     -webkit-font-smoothing: antialiased;
     background-image: url(assets/pattern.png);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 button.btn
@@ -22,10 +24,24 @@ button.btn
     border-style: solid;
 }
 
+button.btn.btn-red
+{
+    background-color: #f44336;    
+}
+
 button.btn.btn-green
 {
-    border-color: #419744;
     background-color: #4caf50;    
+}
+
+button.btn.btn-purple
+{
+    background-color: #673ab7;
+}
+
+button.btn:disabled
+{
+    opacity: .75;
 }
 
 .container

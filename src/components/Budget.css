@@ -1,15 +1,15 @@
 .budget
 {
-    top: 0;
     right: 0;
     z-index: 1;
+    top: -130px;
     width: 486px;
     bottom: -100px;
     position: absolute;
 }
 
-.budget .content,
-.budget .gary-gary
+.budget .empty,
+.budget .content
 {
     top: 0;
     left: 0;
@@ -17,29 +17,12 @@
     bottom: 0;
     margin-left: 40px;
     position: absolute;
-}
-
-.budget .gary-gary
-{
-    background-color: rgba(255,255,255, .5);
-}
-
-.budget .gary-gary:nth-child(1)
-{
-    transform: rotate(3deg);
-}
-
-.budget .gary-gary:nth-child(2)
-{
-    transform: rotate(-3deg);
-}
-
-.budget .content
-{
+    border-radius: 8px;
+    margin-bottom: 100px;
     background-color: #fff;
 }
 
-.budget .content .empty
+.budget .empty p
 {
     top: 0;
     bottom: 0;
@@ -48,4 +31,149 @@
     margin: auto 88px;
     position: absolute;
     text-align: center;
+}
+
+.budget .content .title-1
+{
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 8px 8px 0 0;
+}
+
+.budget .content .seller
+{
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.budget .content .title-2
+{
+    color: #fff;
+    padding: 5px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;    
+    background-color: #333;
+}
+
+.budget .content .items
+{
+    left: 0;
+    right: 0;
+    top: 174px;
+    bottom: 108px;
+    overflow-y: auto;
+    position: absolute;
+}
+
+.budget .content .items .item
+{
+    padding: 15px;
+    font-size: 16px;
+}
+
+.budget .content .items .item .CdChamada
+{
+    float: left;
+}
+
+.budget .content .items .item .VlItem,
+.budget .content .items .item .QtUnidade,
+.budget .content .items .item .VlTotalItem
+{
+    float: right;
+    margin-left: 10px;
+}
+
+.budget .content .items .item .NmProduto
+{
+    clear: both;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.budget .content.dav .items,
+.budget .content.dav .title-1
+{
+    background-color: #feff99;
+}
+
+.budget .content.dav .items .item:not(:last-child)
+{
+    border-bottom: 1px solid #ccc;
+}
+
+.budget .content.pedido .title-1
+{
+    color: #fff;
+    background-color: #006634;
+}
+
+.budget .content.pedido .items
+{
+    background-color: #ccc;
+}
+
+.budget .content.pedido .items .item:not(:last-child)
+{
+    border-bottom: 1px solid #bbb;
+}
+
+.budget .content .rodape
+{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+    font-size: 16px;
+    position: absolute;
+}
+
+.budget .content .rodape .info
+{
+    width: 50%;
+    float: left;
+}
+
+.budget .content .rodape .info:nth-child(odd)
+{
+    padding-right: 10px;
+}
+
+.budget .content .rodape .info:nth-child(even)
+{
+    padding-left: 10px;
+}
+
+.budget .content .rodape .info span
+{
+    float: right;
+    font-weight: bold;
+}
+
+.budget .controle
+{
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-left: 40px;
+    position: absolute;
+}
+
+.budget .controle button
+{
+    width: 30%;
+    padding: 20px;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.budget .controle button:nth-child(2)
+{
+    margin: 0 5%;
 }

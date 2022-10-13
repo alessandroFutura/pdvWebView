@@ -5,17 +5,16 @@ import {Modal} from 'rsuite';
 import Api from './ServiceApi.js';
 import Context from './contexts/Context.js'
 
-// import Bar from './components/Bar.js';
-// import Form from './components/Form.js';
-// import Modal from "./components/Modal.js";
-// import Right from './components/Right.js';
-// import Company from './components/Company.js';
+
+
 import Header from './components/Header.js';
 import Tabs from './components/Tabs.js';
 import Budget from './components/Budget.js';
 import Bar from './components/Bar.js';
 import Footer from './components/Footer.js';
 import Loading from "./components/Loading.js";
+// import ModalPayment from "./components/ModalPayment.js";
+import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
 
 import './App.css';
@@ -29,68 +28,103 @@ const App = () => {
         },1000)
     },[]);
 
-    const apiError = () => {
-        setModalMessage({
-            title: 'Atenção!',
-            message: 'Resposta inesperada do servidor.',
-            opened: true
-        });
-    }
-
     const [user, setUser] = useState({
-        image: null,
-        user_id: null,
+        image: '',
+        user_id: '',
+        person_id: '',
+        user_active: '',
         user_name: '',
         access: {},
         companies: []
     });
 
     const [company, setCompany] = useState({
-        image: null,
-        company_id: null,
-        company_code: null,
+        image: '',
+        parent_id: '',
+        company_id: '',
+        company_code: '',
         company_name: '',
-        company_color: null
+        company_color: '',
+        user_company_main: '',
+        company_short_name: ''
     });
 
-    const [budget, setBudget] = useState({});
-    const [budgets, setBudgets] = useState([]);
-    const [budget_id, setBudgetId] = useState(null);
+    const [budget, setBudget] = useState({
+        term_id: '',
+        budget_id: '',
+        client_id: '',
+        seller_id: '',
+        company_id: '',
+        budget_value: '',
+        document_code: '',
+        external_type: '',
+        budget_value_total: '',
+        budget_value_discount: '',
+        term: {
+            IdPrazo: '',
+            CdChamada: '',
+            DsPrazo: ''
+        },
+        items: [],
+        payments: [],
+        person: {
+            image: '',
+            IdPessoa: '',
+            CdChamada: '',
+            NmPessoa: ''
+        },
+        seller: {
+            image: '',
+            IdPessoa: '',
+            CdChamada: '',
+            NmPessoa: ''
+        }
+    });
+
+    const [filters, setFilters] = useState({
+        states: ['L'],
+        company_id: null,
+        reference: moment().format('YYYY-MM-DD')
+    });
+    
+    const [modalConfirm, setModalConfirm] = useState({
+        title: '',
+        message: '',
+        opened: false,
+        confirmed: false,
+        buttonDenyText: '',
+        buttonConfirmText: ''
+    });
 
     const [modalMessage, setModalMessage] = useState({
         title: '',
         message: '',
         opened: false
     });
-    
-    const [loading, setLoading] = useState(0);    
+
+    const [loading, setLoading] = useState(0);
+    const [budgets, setBudgets] = useState([]);
+    const [budget_id, setBudgetId] = useState(null);   
     // const [modalData, setModalData] = useState({});
     const [loadingStyle, setLoadingStyle] = useState({});
 
     const [time, setTime] = useState(moment().format('HH:mm'));
     const [dtReferencia, setDtReferencia] = useState(new Date());
 
-    useEffect(() => {
-        showLoading();
-    }, [loading]);
-
-    useEffect(() => {
-        if(!!company.company_id){
-            getBudgets();
+    const afterModalConfirm = () => {
+        switch(modalConfirm.id){
+            case 'budget-submit': submitBudget(); break;
+            default: break;
         }
-    }, [company]);
+    }
 
-    useEffect(() => {
-        if(!!company.company_id){
-            getBudgets();
-        }
-    }, [dtReferencia]);
-
-    useEffect(() => {
-        if(!!budget_id){
-            getBudget();
-        }
-    }, [budget_id]);
+    const apiErrorMessage = () => {
+        setModalMessage({
+            title: 'Atenção!',
+            message: 'Resposta inesperada do servidor.',
+            opened: true
+        });
+    }
 
     const getUser = () => {
         setLoading(loading => loading+1);
@@ -101,7 +135,7 @@ const App = () => {
                     return company.user_company_main === 'Y';
                 })[0]);
             } else {
-                apiError();
+                apiErrorMessage();
             }
             setLoading(loading => loading-1);   
         });
@@ -115,7 +149,7 @@ const App = () => {
             if(res.status === 200){
                 setBudget(res.data);                
             } else {
-                apiError();
+                apiErrorMessage();
             }
             setLoading(loading => loading-1);
         });
@@ -123,10 +157,7 @@ const App = () => {
 
     const getBudgets = () => {
         setLoading(loading => loading+1);
-        Api.post({script: 'budget', action: 'getList', data: {
-            company_id: company.company_id,
-            reference: moment(dtReferencia).format('YYYY-MM-DD')
-        }}).then((res) => {
+        Api.post({script: 'budget', action: 'getList', data: filters}).then((res) => {
             if(res.status === 200){
                 setBudgets(res.data);
             } else {
@@ -140,11 +171,97 @@ const App = () => {
         });
     };
 
+    const initBudget = () => {
+        setBudget({
+            term_id: '',
+            budget_id: '',
+            client_id: '',
+            seller_id: '',
+            company_id: '',
+            budget_value: '',
+            document_code: '',
+            external_type: '',
+            budget_value_total: '',
+            budget_value_discount: '',
+            term: {
+                IdPrazo: '',
+                CdChamada: '',
+                DsPrazo: ''
+            },
+            items: [],
+            payments: [],
+            person: {
+                image: '',
+                IdPessoa: '',
+                CdChamada: '',
+                NmPessoa: ''
+            },
+            seller: {
+                image: '',
+                IdPessoa: '',
+                CdChamada: '',
+                NmPessoa: ''
+            }
+        });
+    }
+
     const showLoading = () => {        
         setLoadingStyle({
             display: loading > 0 ? 'block' : 'none'
         }); 
     };
+
+    const submitBudget = () => {
+        setLoading(loading => loading+1);
+        Api.post({script: 'budget', action: 'submit', data: budget}).then((res) => {
+            if(res.status === 200){
+                          
+            } else {
+                console.log(res);
+            }
+            setLoading(loading => loading-1);
+        });
+    }
+
+    useEffect(() => {
+        showLoading();
+    }, [loading]);
+
+    useEffect(() => {
+        if(!!company.company_id){
+            setFilters({
+                company_id: company.company_id,
+                states: filters.states,
+                reference: filters.reference
+            });
+        }
+    }, [company]);
+
+    useEffect(() => {
+        if(!!filters.company_id){
+            if(filters.states.length > 0){
+                getBudgets();
+            } else {
+                setModalMessage({
+                    title: 'Atenção!',
+                    message: 'Pelo menos um status deverá ser selecionado.',
+                    opened: true
+                })
+            }
+        }
+    }, [filters]);
+
+    useEffect(() => {
+        if(!!budget_id){
+            getBudget();
+        }
+    }, [budget_id]);
+
+    useEffect(() => {
+        if(modalConfirm.confirmed){
+            afterModalConfirm();
+        }
+    }, [modalConfirm]);
 
     return (
         <Context.Provider value={{
@@ -153,18 +270,20 @@ const App = () => {
             budget,
             budgets,
             company, setCompany, 
+            filters, setFilters,
             budget_id, setBudgetId,
-            dtReferencia, setDtReferencia,
+            modalConfirm, setModalConfirm,
             modalMessage, setModalMessage,
         }}>
             <Header/>
             <div className="body">
-                <Tabs/>
+                <Tabs initBudget={initBudget}/>
                 <Budget/>
             </div>
             <Bar/>
             <Footer/>
             <Modal/>
+            <ModalConfirm/>
             <ModalMessage/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>

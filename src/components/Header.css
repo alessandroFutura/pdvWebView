@@ -39,12 +39,13 @@
 
 .header .container .reference
 {
-    width: 158px;
+    width: 138px;
+    margin-left: 30px;
 }
 
 .header .container .reference div[role="combobox"]
 {
-    width: 154px;
+    width: 134px;
     font-size: 16px;
     padding: 12px 32px 11px 12px
 }
@@ -95,24 +96,36 @@
     font-size: 16px;
 }
 
+.header .container .toggles
+{
+    top: 30px;
+    left: 308px;
+    width: 458px;
+    position: absolute;
+}
+
+.header .container .toggles .toggle
+{
+    float: left;
+    width: 138px;
+    margin-right: 38px;
+}
+
+.header .container .toggles .toggle b
+{
+    top: 2px;
+    color: #fff;
+    font-size: 18px;
+    margin-left: 10px;
+    position: relative;
+}
+
 .header .container .date
 {
     float: right;
-    margin-top: 50px;
+    font-size: 18px;
     text-align: right;
+    color: #419744;
     font-weight: bold;
     text-transform: uppercase;
-}
-
-.header .container .date .time,
-.header .container .date .day-of-week
-{
-    font-size: 18px;
-    color: #419744;
-}
-
-.header .container .date .day-of-year
-{
-    color: #fff;
-    font-size: 20px;
 }
