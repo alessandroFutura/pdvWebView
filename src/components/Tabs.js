@@ -62,7 +62,10 @@ const Tabs = ({initBudget}) => {
     }, [budgets]);
 
     useEffect(() => {
-        setBudgetId(dataRow.budget_id)
+        if(!!dataRow.budget_id){
+            setBudgetId(dataRow.budget_id);
+            setDataRow({});
+        }
     }, [dataRow]);
 
     return (

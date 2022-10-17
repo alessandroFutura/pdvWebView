@@ -1,7 +1,7 @@
 import React, {useContext}  from "react";
 
 import { Modal, Button } from 'rsuite';
-import HelpOutline from '@rsuite/icons/legacy/Remind';
+import {HelpOutline} from '@rsuite/icons';
 
 import Context from '../../contexts/Context.js';
 
@@ -23,7 +23,7 @@ const ModalConfirm = () => {
     return (
         <Modal backdrop="static" role="alertdialog" open={modalConfirm.opened} onClose={handleModalClose} size="xs">
             <Modal.Body>
-                <HelpOutline style={{ color: '#ffb300', fontSize: 24 }} />
+                <HelpOutline style={{ fontSize: 24 }} />
                 {modalConfirm.message}
             </Modal.Body>
             <Modal.Footer>

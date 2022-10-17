@@ -12,12 +12,12 @@ const Budget = () => {
         let payments = [];
 
         budget.payments.forEach(payment => {
-            if(payments.indexOf(payment.modality.DsFormaPagamento) == -1){
+            if(payments.indexOf(payment.modality.DsFormaPagamento) === -1){
                 payments.push(payment.modality.DsFormaPagamento);
             }
         });
         
-        return payments.length == 1 ? payments[0] : 'MULTIPLAS';
+        return payments.length === 1 ? payments[0] : 'MULTIPLAS';
     }
     
     const handleButtonDeleteClick = () => {
@@ -25,7 +25,14 @@ const Budget = () => {
     }
 
     const handleButtonCancelClick = () => {
-        console.log('cancel');
+        setModalConfirm({
+            id: 'budget-cancel',
+            message: 'Deseja realmente cancelar o faturamento?',
+            opened: true,
+            confirmed: false,
+            buttonDenyText: 'Não',
+            buttonConfirmText: 'Sim'
+        });
     }
 
     const handleButtonSubmitClick = () => {
@@ -71,7 +78,7 @@ const Budget = () => {
             <div className="controle">
                 <button disabled={!budget.budget_id || !!budget.document_code} onClick={() => handleButtonDeleteClick()} className="btn btn-red">Excluir</button>
                 <button disabled={!budget.budget_id} onClick={() => handleButtonCancelClick()} className="btn btn-purple">Cancelar</button>
-                <button disabled={!budget.budget_id || !!budget.document_code} onClick={() => handleButtonSubmitClick()} className="btn btn-green">Faturar</button>
+                <button disabled={!budget.budget_id} onClick={() => handleButtonSubmitClick()} className="btn btn-green">Faturar</button>
             </div>
         </div>
     );

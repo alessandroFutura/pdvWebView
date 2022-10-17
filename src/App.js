@@ -109,11 +109,11 @@ const App = () => {
     const [loadingStyle, setLoadingStyle] = useState({});
 
     const [time, setTime] = useState(moment().format('HH:mm'));
-    const [dtReferencia, setDtReferencia] = useState(new Date());
 
     const afterModalConfirm = () => {
         switch(modalConfirm.id){
             case 'budget-submit': submitBudget(); break;
+            case 'budget-cancel': initBudget(); break;
             default: break;
         }
     }
@@ -203,9 +203,10 @@ const App = () => {
                 NmPessoa: ''
             }
         });
+        setBudgetId(null);
     }
 
-    const showLoading = () => {        
+    const showLoading = () => {
         setLoadingStyle({
             display: loading > 0 ? 'block' : 'none'
         }); 
