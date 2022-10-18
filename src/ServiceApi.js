@@ -6,11 +6,11 @@ axios.defaults.baseURL = host;
 class ServiceApi {
     post = async (params) => {
         return await axios.post(`api/${params.script}.php?${new URLSearchParams({
-            action: params.action,
-            user_id: user_id,
-            user_session_value: user_session_value
+            action: params.action
         }).toString()}`, (params.data || null), {headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'x-user-id': user_id,
+            'x-user-session-value': user_session_value,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }}).then((res) => {
            return res;
         }).catch((res) => {console.log(res);
@@ -22,14 +22,13 @@ class ServiceApi {
     }
 
     error = (params, response) => {
-        axios.post(`error.php?${new URLSearchParams({
-            user_id: user_id,
-            user_session_value: user_session_value
-        }).toString()}`, {
+        axios.post(`error.php`, {
             params: params,
             response: response
         }, {headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'user_id': user_id,
+            'user_session_value': user_session_value,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }});
     }
 }

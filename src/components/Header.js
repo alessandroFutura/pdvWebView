@@ -26,10 +26,14 @@ const Header = () => {
         item => ({label: `${item.company_code} - ${item.company_name.toUpperCase()}`, value: item.company_id})
     );
 
+    const handleAbout = () => {
+        window.about();
+    }
+
     return (
         <div className="header">
             <div className="container">
-                <div className="logo"></div>
+                <div className="logo" onClick={() => handleAbout()}></div>
                 <div className="reference">
                     <label>DATA</label>
                     <Stack direction="column" alignItems="flex-start" spacing={6}>

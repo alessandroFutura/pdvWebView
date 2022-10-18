@@ -11,6 +11,7 @@
 .header .container
 {
     height: 128px;
+    position: relative;
 }
 
 .header .container .logo
@@ -98,8 +99,8 @@
 
 .header .container .toggles
 {
-    top: 30px;
-    left: 308px;
+    top: 16px;
+    left: 258px;
     width: 458px;
     position: absolute;
 }
