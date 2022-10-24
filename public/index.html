@@ -15,20 +15,12 @@
     <div id="root"></div>
   </body>
   <script type="text/javascript">
-    function about(){
-    	require('electron').ipcRenderer.postMessage('about');
-    }
-	function afterLogout(){
-    	require('electron').ipcRenderer.postMessage('logout');
-    }
-	function openDevTools(){
-    	require('electron').ipcRenderer.postMessage('openDevTools', 'appWindow');
-    }
-    function getData(){
-		let url = new URL(location.href);
-		window.host = 'localhost';
-		window.user_id = url.searchParams.get('user_id');
-		window.user_session_value = url.searchParams.get('user_session_value');
-    }
+    function electronMessage(message, data){
+		try {
+			require('electron').ipcRenderer.postMessage(message, data || null);
+		} catch (e) {
+			
+		}
+	}
   </script>
 </html>

@@ -11,7 +11,6 @@ import {SelectPicker, DatePicker, Stack} from 'rsuite';
 
 import "./Header.css";
 import 'rsuite/dist/rsuite.min.css';
-import { startOfISOWeek } from "rsuite/esm/utils/dateUtils.js";
 
 const Header = () => {
     
@@ -27,7 +26,7 @@ const Header = () => {
     );
 
     const handleAbout = () => {
-        window.about();
+        window.postMessage('about');
     }
 
     return (

@@ -2,7 +2,8 @@ const queryString = require('query-string');
 
 const parsed = queryString.parse(window.location.search);
 
-const host = 'http://localhost/pdv/';
+const host = `http://${window.location.hostname}/pdv/`;
+const token = parsed.token;
 const user_id = parsed.user_id;
 const user_session_value = parsed.user_session_value;
 
@@ -24,4 +25,4 @@ const numberFormat = (params) => {
     return parseFloat(params.value).toLocaleString((params.locale || 'pt-BR'), options);
 }
 
-export {host, user_id, user_session_value, numberFormat}
+export {host, token, user_id, user_session_value, numberFormat}

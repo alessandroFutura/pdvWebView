@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import moment from 'moment';
 import {Modal} from 'rsuite';
 import Api from './ServiceApi.js';
-import Context from './contexts/Context.js'
+import Context from './contexts/Context.js';
 
 
 
@@ -131,7 +131,9 @@ const App = () => {
         Api.post({script: 'user', action: 'get'}).then((res) => {
             if(res.status === 200){
                 setUser(res.data);
-                setCompany(res.data.companies[0]);
+                setCompany(res.data.companies.filter((company) => {
+                    return company.user_company_main == 'Y'
+                })[0]);
             } else {
                 apiErrorMessage();
             }

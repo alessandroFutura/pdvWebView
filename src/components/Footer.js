@@ -9,7 +9,7 @@ const Footer = () => {
     const {user, company} = useContext(Context);
 
     const handleOpenDevTools = () => {
-        window.openDevTools();
+        window.electronMessage('openDevTools', 'appWindow');
     }
 
     return (
