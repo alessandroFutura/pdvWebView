@@ -22,7 +22,7 @@ const Header = () => {
     } = useContext(Context);
 
     const data = user.companies.map(
-        item => ({label: `${item.company_code} - ${item.company_name.toUpperCase()}`, value: item.company_id})
+        item => ({label: `${item.company_code} - ${item.company_short_name.toUpperCase()}`, value: item.company_id})
     );
 
     const handleAbout = () => {

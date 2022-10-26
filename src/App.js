@@ -213,8 +213,10 @@ const App = () => {
     };
 
     const submitBudget = () => {
+        let data = budget;
+        data.company = company;
         setLoading(loading => loading+1);
-        Api.post({script: 'budget', action: 'submit', data: budget}).then((res) => {
+        Api.post({script: 'budget', action: 'submit', data: data}).then((res) => {
             if(res.status === 200){
                           
             } else {

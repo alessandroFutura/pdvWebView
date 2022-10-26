@@ -17,7 +17,7 @@ const Footer = () => {
             <div className="container">
                 <div className="company">
                     <div className="company-image" style={{backgroundImage: `url(${company.image})`}} onClick={() => handleOpenDevTools()}></div>
-                    <div className="company-name">{company.company_code} - {company.company_name.toUpperCase()}</div>
+                    <div className="company-name">{company.company_code} - {company.company_short_name.toUpperCase()}</div>
                 </div>
                 <div className="user">
                     <div className="user-image" style={{backgroundImage: `url(${user.image})`}}></div>
