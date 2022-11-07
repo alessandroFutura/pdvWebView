@@ -6,14 +6,14 @@ import "./Budget.css";
 
 const Budget = () => {
     
-    const {budget, modalConfirm, setModalConfirm} = useContext(Context);
+    const {budget, setModalConfirm} = useContext(Context);
 
     const getPayment = () => {
         let payments = [];
 
         budget.payments.forEach(payment => {
-            if(payments.indexOf(payment.modality.DsFormaPagamento) === -1){
-                payments.push(payment.modality.DsFormaPagamento);
+            if(payments.indexOf(payment.external.DsFormaPagamento) === -1){
+                payments.push(payment.external.DsFormaPagamento);
             }
         });
         
@@ -25,14 +25,21 @@ const Budget = () => {
     }
 
     const handleButtonCancelClick = () => {
-        setModalConfirm({
-            id: 'budget-cancel',
-            message: 'Deseja realmente cancelar o faturamento?',
-            opened: true,
-            confirmed: false,
-            buttonDenyText: 'Não',
-            buttonConfirmText: 'Sim'
-        });
+        if(!budget.document || budget.document.cStat !== 100){
+            setModalConfirm({
+                id: 'budget-cancel',
+                message: 'Deseja realmente cancelar o faturamento?',
+                opened: true,
+                confirmed: false,
+                buttonDenyText: 'Não',
+                buttonConfirmText: 'Sim'
+            });
+        } else {
+            setModalConfirm({
+                id: 'budget-cancel',
+                confirmed: true
+            });
+        }
     }
 
     const handleButtonSubmitClick = () => {
@@ -46,13 +53,33 @@ const Budget = () => {
         });
     }
 
+    const deleteButtonDisabled = () => {
+        return (
+            !budget.budget_id || 
+            !!budget.document
+        );
+    }
+
+    const cancelButtonDisabled = () => {
+        return (
+            !budget.budget_id
+        );
+    }
+
+    const submitButtonDisabled = () => {
+        return (
+            !budget.budget_id || 
+            (!!budget.document && budget.document.cStat === 100)
+        );
+    }
+
     return (
         <div className="budget">
             <div style={{display:(!!budget.budget_id > 0 ? 'none' : 'block')}} className="empty">
                 <p>SELECIONE UM DOCUMENTO PARA FATURAR</p>
             </div>
-            <div style={{display:(budget.budget_id > 0 ? 'block' : 'none')}} className={`content box-shadow ${budget.external_type == 'D' ? 'dav' : 'pedido'}`}>
-                <div className="title-1">{!!budget.document_code ? `${budget.document_code} - ` : ''}{budget.external_type == 'D' ? 'Cupom Fiscal' : 'Ordem de Entrega'}</div>
+            <div style={{display:(budget.budget_id > 0 ? 'block' : 'none')}} className={`content box-shadow ${budget.external_type === 'D' ? 'dav' : 'pedido'}`}>
+                <div className="title-1">{!!budget.document ? `${budget.document.nNF} - ` : ''}{budget.external_type === 'D' ? 'Cupom Fiscal' : 'Ordem de Entrega'}</div>
                 <div className="seller">{budget.seller.CdChamada} - {budget.seller.NmPessoa}</div>
                 <div className="title-2">ITENS DO DOCUMENTO</div>
                 <div className="items">                    
@@ -61,7 +88,7 @@ const Budget = () => {
                             <div className="CdChamada">{item.product.CdChamada}</div>
                             <div className="VlTotalItem">R$ {numberFormat({value: item.budget_item_value_total})}</div>
                             <div className="VlItem">R$ {numberFormat({value: item.budget_item_value_unitary})}</div>
-                            <div className="QtUnidade">{numberFormat({value: item.budget_item_quantity})} {item.product.unit.CdSigla}</div>
+                            <div className="QtUnidade">{numberFormat({value: item.budget_item_quantity})} {item.product.CdSigla}</div>
                             <div className="NmProduto">{item.product.NmProduto}</div>
                         </div>
                     ))}                                       
@@ -76,9 +103,9 @@ const Budget = () => {
                 </div>                
             </div>
             <div className="controle">
-                <button disabled={!budget.budget_id || !!budget.document_code} onClick={() => handleButtonDeleteClick()} className="btn btn-red">Excluir</button>
-                <button disabled={!budget.budget_id} onClick={() => handleButtonCancelClick()} className="btn btn-purple">Cancelar</button>
-                <button disabled={!budget.budget_id} onClick={() => handleButtonSubmitClick()} className="btn btn-green">Faturar</button>
+                <button disabled={deleteButtonDisabled()} onClick={() => handleButtonDeleteClick()} className="btn btn-red">Excluir</button>
+                <button disabled={cancelButtonDisabled()} onClick={() => handleButtonCancelClick()} className="btn btn-purple">Cancelar</button>
+                <button disabled={submitButtonDisabled()} onClick={() => handleButtonSubmitClick()} className="btn btn-green">Faturar</button>
             </div>
         </div>
     );

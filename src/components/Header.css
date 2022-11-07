@@ -97,6 +97,22 @@
     font-size: 16px;
 }
 
+.header .container button
+{
+    z-index: 1;
+    width: 48px;
+    left: 662px;
+    height: 48px;
+    padding: 8px;
+    color: #fff;
+    cursor: pointer;
+    margin: 6px 4px;
+    font-size: 28px;
+    position: absolute;
+    border-radius: 4px;
+    background-color: #22882d;
+}
+
 .header .container .toggles
 {
     top: 16px;

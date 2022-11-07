@@ -18,10 +18,10 @@ class ServiceApi {
             res.status = res.response.status;
             res.statusText = res.response.statusText;
             this.error(params.data || null, res.response.data);                
-            if(res.status == 401){
+            if(res.status === 401){
                 window.electronMessage('Unauthorized', 'appWindow');
             }
-            if(res.status == 403){
+            if(res.status === 403){
                 window.electronMessage('afterLogout');
             }  
             return res;  

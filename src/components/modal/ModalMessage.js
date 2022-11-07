@@ -22,7 +22,7 @@ const ModalMessage = () => {
                 <Modal.Title>{modalMessage.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>{modalMessage.message}</p>
+                <div dangerouslySetInnerHTML={{__html: modalMessage.message}}></div>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => handleModalClose()} appearance="primary">Ok</Button>

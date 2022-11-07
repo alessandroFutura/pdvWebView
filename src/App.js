@@ -121,7 +121,7 @@ const App = () => {
     const apiErrorMessage = () => {
         setModalMessage({
             title: 'Atenção!',
-            message: 'Resposta inesperada do servidor.',
+            message: '<p>Resposta inesperada do servidor.</p>',
             opened: true
         });
     }
@@ -132,7 +132,7 @@ const App = () => {
             if(res.status === 200){
                 setUser(res.data);
                 setCompany(res.data.companies.filter((company) => {
-                    return company.user_company_main == 'Y'
+                    return company.user_company_main === 'Y'
                 })[0]);
             } else {
                 apiErrorMessage();
@@ -156,6 +156,7 @@ const App = () => {
     };
 
     const getBudgets = () => {
+        initBudget();
         setLoading(loading => loading+1);
         Api.post({script: 'budget', action: 'getList', data: filters}).then((res) => {
             if(res.status === 200){
@@ -221,6 +222,11 @@ const App = () => {
                           
             } else {
                 console.log(res);
+                setModalMessage({
+                    title: 'Atenção!',
+                    message: res.response.data.message,
+                    opened: true
+                });
             }
             setLoading(loading => loading-1);
         });
@@ -242,6 +248,7 @@ const App = () => {
 
     useEffect(() => {
         if(!!filters.company_id){
+            initBudget();
             if(filters.states.length > 0){
                 getBudgets();
             } else {

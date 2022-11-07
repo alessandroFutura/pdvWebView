@@ -5,6 +5,8 @@ import { Toggle } from 'rsuite';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import { HiOutlineRefresh } from 'react-icons/hi';
+
 import Context from '../contexts/Context.js';
 
 import {SelectPicker, DatePicker, Stack} from 'rsuite';
@@ -28,6 +30,14 @@ const Header = () => {
     const handleAbout = () => {
         window.postMessage('about');
     }
+
+    const handleButtonRefrehClick = () => {
+        setFilters({
+            company_id: filters.company_id,
+            states: filters.states,
+            reference: filters.reference
+        });
+    };
 
     return (
         <div className="header">
@@ -63,12 +73,15 @@ const Header = () => {
                         placeholder="--" 
                     />
                 </div>
+                <button onClick={(e) => handleButtonRefrehClick()}>
+                    <HiOutlineRefresh />
+                </button>
                 <div className="toggles">
                     <div className="toggle">
                         <Toggle defaultChecked onChange={(checked) => {
                             setFilters({
                                 company_id: filters.company_id,
-                                states: checked ? filters.states.concat(['L']) : (filters.states.length == 1 ? [] : ['B']),
+                                states: checked ? filters.states.concat(['L']) : (filters.states.length === 1 ? [] : ['B']),
                                 reference: filters.reference
                             })
                         }}/><b>Abertos</b>
@@ -77,7 +90,7 @@ const Header = () => {
                         <Toggle onChange={(checked) => {
                             setFilters({
                                 company_id: filters.company_id,
-                                states: checked ? filters.states.concat(['B']) : (filters.states.length == 1 ? [] : ['L']),
+                                states: checked ? filters.states.concat(['B']) : (filters.states.length === 1 ? [] : ['L']),
                                 reference: filters.reference
                             })
                         }}/><b>Faturados</b>

@@ -41,7 +41,7 @@ const Tabs = ({initBudget}) => {
         budgets.forEach(budget => {
             let data = {
                 budget_id: budget.budget_id,
-                NrDocumento: budget.document_code || '--',
+                NrDocumento: budget.nNF || '--',
                 NmCliente: budget.NmPessoa,
                 NrDav: budget.external_code,
                 NmVendedor: budget.NmRepresentante.split(' ')[0],
