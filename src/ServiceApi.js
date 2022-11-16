@@ -14,7 +14,7 @@ class ServiceApi {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }}).then((res) => {
            return res;
-        }).catch((res) => {console.log(res);
+        }).catch((res) => {
             res.status = res.response.status;
             res.statusText = res.response.statusText;
             this.error(params.data || null, res.response.data);                

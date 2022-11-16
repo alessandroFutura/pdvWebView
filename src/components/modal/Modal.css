@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 0;
+    z-index: 1;
     opacity: 0;    
     display: none;
     position: fixed;
@@ -12,16 +12,19 @@
     background-color: rgba(0,0,0,.5);
 }
 
-.shadow .modal
+.shadow.opened
 {
-    
+    opacity: 1;
+    display: block;
+}
+
+.shadow .modal
+{    
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     margin: auto;
-    width: 800px;
-    height: 600px;
     position: absolute;
     background-color: #fff;
 }
@@ -71,9 +74,4 @@
     padding: 20px;
     position: absolute;
     border-top: 1px solid #ddd;
-}
-
-.shadow .modal .footer button
-{
-    
 }

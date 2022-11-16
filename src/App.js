@@ -16,8 +16,10 @@ import Loading from "./components/Loading.js";
 // import ModalPayment from "./components/ModalPayment.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
+import ModalResponse from "./components/modal/ModalResponse.js";
 
 import './App.css';
+import './components/modal/Modal.css';
 
 const App = () => {    
     
@@ -35,6 +37,7 @@ const App = () => {
         user_active: '',
         user_name: '',
         access: {},
+        terminal: {},
         companies: []
     });
 
@@ -102,17 +105,25 @@ const App = () => {
         opened: false
     });
 
+    const [modalResponse, setModalResponse] = useState({
+        class: '',
+        title: '',
+        message: '',
+        opened: false
+    });
+
     const [loading, setLoading] = useState(0);
     const [budgets, setBudgets] = useState([]);
-    const [budget_id, setBudgetId] = useState(null);   
+    const [budget_id, setBudgetId] = useState(null); 
     // const [modalData, setModalData] = useState({});
-    const [loadingStyle, setLoadingStyle] = useState({});
-
+    const [loadingStyle, setLoadingStyle] = useState({});    
+    
     const [time, setTime] = useState(moment().format('HH:mm'));
+    const [updateBeforeSend, setUpdateBeforeSend] = useState(false);
 
     const afterModalConfirm = () => {
         switch(modalConfirm.id){
-            case 'budget-submit': submitBudget(); break;
+            case 'budget-submit': if(updateBeforeSend) getBudget(); else submitBudget(); break;
             case 'budget-cancel': initBudget(); break;
             default: break;
         }
@@ -147,7 +158,10 @@ const App = () => {
             budget_id: budget_id
         }}).then((res) => {
             if(res.status === 200){
-                setBudget(res.data);                
+                setBudget(res.data);
+                if(updateBeforeSend){
+                    submitBudget();
+                }
             } else {
                 apiErrorMessage();
             }
@@ -156,7 +170,7 @@ const App = () => {
     };
 
     const getBudgets = () => {
-        initBudget();
+        initBudget();        
         setLoading(loading => loading+1);
         Api.post({script: 'budget', action: 'getList', data: filters}).then((res) => {
             if(res.status === 200){
@@ -205,6 +219,7 @@ const App = () => {
             }
         });
         setBudgetId(null);
+        setUpdateBeforeSend(false);
     }
 
     const showLoading = () => {
@@ -217,16 +232,23 @@ const App = () => {
         let data = budget;
         data.company = company;
         setLoading(loading => loading+1);
-        Api.post({script: 'budget', action: 'submit', data: data}).then((res) => {
+        Api.post({script: 'budget', action: 'submit' + (budget.external_type === 'D' ? 'DAV' : 'Pedido'), data: data}).then((res) => {
             if(res.status === 200){
-                          
+                getBudgets();
+                setModalResponse({
+                    class: 'success',
+                    title: res.data.NrDocumento,
+                    message: 'Documento faturado com sucesso!',
+                    opened: true
+                });                  
             } else {
-                console.log(res);
-                setModalMessage({
-                    title: 'Atenção!',
+                setModalResponse({
+                    class: 'error',
+                    title: 'Ops!',
                     message: res.response.data.message,
                     opened: true
                 });
+                setUpdateBeforeSend(true);
             }
             setLoading(loading => loading-1);
         });
@@ -284,6 +306,7 @@ const App = () => {
             budget_id, setBudgetId,
             modalConfirm, setModalConfirm,
             modalMessage, setModalMessage,
+            modalResponse, setModalResponse,
         }}>
             <Header/>
             <div className="body">
@@ -295,6 +318,7 @@ const App = () => {
             <Modal/>
             <ModalConfirm/>
             <ModalMessage/>
+            <ModalResponse/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>
     );

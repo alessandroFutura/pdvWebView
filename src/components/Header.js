@@ -20,7 +20,8 @@ const Header = () => {
         time, 
         user, 
         company, setCompany, 
-        filters, setFilters
+        filters, setFilters,
+        setModalResponse
     } = useContext(Context);
 
     const data = user.companies.map(
@@ -28,7 +29,13 @@ const Header = () => {
     );
 
     const handleAbout = () => {
-        window.postMessage('about');
+        setModalResponse({
+            class: 'success',
+            title: 'Sucesso!',
+            message: 'Documento faturado com sucesso!',
+            opened: true
+        });
+        //window.postMessage('about');
     }
 
     const handleButtonRefrehClick = () => {
