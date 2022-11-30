@@ -13,7 +13,7 @@ import "./ModalPayment.css";
 
 const ModalPayment = () => {    
     
-    const {budget, modalPayment, setModalConfirm, setModalPayment} = useContext(Context);
+    const {budget, modalPayment, setModalConfirm, setModalPayment, setModalMessage} = useContext(Context);
 
     const handleCloseClick = () => {
         setModalPayment({
@@ -22,15 +22,31 @@ const ModalPayment = () => {
     };
 
     const handleSubmitClick = () => {
-        setModalConfirm({
-            id: 'budget-submit',
-            message: 'Deseja realmente faturar o documento?',
-            opened: true,
-            confirmed: false,
-            buttonDenyText: 'Não',
-            buttonConfirmText: 'Sim'
-        });
+        if(hasMoney()){
+            setModalMessage({
+                class: 'warning',
+                title: 'Teste',
+                zIndex: 11,
+                message: 'Exibir tela de troco',
+                opened: true
+            });
+        } else {
+            setModalConfirm({
+                id: 'budget-submit',
+                message: 'Deseja realmente faturar o documento?',
+                opened: true,
+                confirmed: false,
+                buttonDenyText: 'Não',
+                buttonConfirmText: 'Sim'
+            });
+        }
     };
+
+    const hasMoney = () => {
+        return budget.payments.filter((payment) => {
+            return payment.modality_id === '00A0000001'
+        }).length > 0;
+    }
 
     return (
         <div className={`shadow ${modalPayment.opened ? 'opened' : ''}`}>
@@ -57,11 +73,11 @@ const ModalPayment = () => {
                         <div className="notes">
                             <div className="note">
                                 <div className="title">Dados da Entrega</div>
-                                <div className="text">{budget.budget_note_document}</div>
+                                <div className="text">{budget.external.StAgendaEntrega === 'S' ? budget.external.DsObservacaoDocumento : 'SEM ENTREGA'}</div>
                             </div>
                             <div className="note">
                                 <div className="title">Observações</div>
-                                <div className="text">{budget.budget_note}</div>
+                                <div className="text">{budget.external.DsObservacaoPedido}</div>
                             </div>
                         </div>
                     </div>
@@ -72,7 +88,13 @@ const ModalPayment = () => {
                             <div className="name">{budget.seller.NmPessoa}</div>
                         </div>
                         <div className="title">Dados do Documento</div>
-                        <div className="data"></div>
+                        <div className="data">
+                            <div className="label">Total de Itens</div><div className="value">{budget.items.length} Item(ns)</div>
+                            <div className="label">Valor Total</div><div className="value">R$ {numberFormat({value: budget.budget_value})}</div>
+                            <div className="label">Al. Desconto</div><div className="value">{numberFormat({value: budget.budget_aliquot_discount})}%</div>
+                            <div className="label">Vl. Desconto</div><div className="value">R$ {numberFormat({value: budget.budget_value_discount})}</div>
+                            <div className="label">Vl Total Liquido</div><div className="value">R$ {numberFormat({value: budget.budget_value_total})}</div>
+                        </div>
                     </div>
                 </div>
                 <div className="footer">

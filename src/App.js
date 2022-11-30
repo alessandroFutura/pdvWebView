@@ -79,6 +79,11 @@ const App = () => {
             IdPessoa: '',
             CdChamada: '',
             NmPessoa: ''
+        },
+        external: {
+            StAgendaEntrega: '',
+            DsObservacaoPedido: '',
+            DsObservacaoDocumento: ''
         }
     });
 
@@ -282,6 +287,11 @@ const App = () => {
                 IdPessoa: '',
                 CdChamada: '',
                 NmPessoa: ''
+            },
+            external: {
+                StAgendaEntrega: '',
+                DsObservacaoPedido: '',
+                DsObservacaoDocumento: ''
             }
         });
         setBudgetId(null);
