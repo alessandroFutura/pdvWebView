@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useContext} from "react";
 
-import DataGrid from './DataGrid.js';
 import Context from '../contexts/Context.js';
 import {numberFormat} from '../contexts/Global.js';
+import DataGridDocument from './grid/DataGridDocument.js';
 
 import "./Tabs.css";
 
@@ -14,17 +14,10 @@ const Tabs = ({initBudget}) => {
     const [styleTab1, setStyleTab1] = useState({display:'block', zIndex:1, opacity:1});
     const [styleTab2, setStyleTab2] = useState({display:'none', zIndex:0, opacity:0});
 
-    const columns = [
-        {dataKey: 'NrDocumento', HeaderCell:'DOCUMENTO'},
-        {dataKey: 'NmCliente', HeaderCell:'CLIENTE'},
-        {dataKey: 'NrDav', HeaderCell:'DAV'},
-        {dataKey: 'NmVendedor', HeaderCell:'VENDEDOR'},
-        {dataKey: 'VlDocumento', HeaderCell:'VALOR'}
-    ];
-
     const [davs, setDavs] = useState([]);
     const [pedidos, setPedidos] = useState([]);
     const [dataRow, setDataRow] = useState({});
+    
     const {budgets, setBudgetId} = useContext(Context);
 
     useEffect(() => {
@@ -36,25 +29,18 @@ const Tabs = ({initBudget}) => {
     }, [tab]);
 
     const afterGetPedidos = () => {
-        let tmpDavs = [];
-        let tmpPedidos = [];
-        budgets.forEach(budget => {
-            let data = {
-                budget_id: budget.budget_id,
-                NrDocumento: budget.nNF || '--',
-                NmCliente: budget.NmPessoa,
-                NrDav: budget.external_code,
-                NmVendedor: budget.NmRepresentante.split(' ')[0],
-                VlDocumento: numberFormat({value: budget.budget_value_total})
-            };
+        let Davs = [];
+        let Pedidos = [];
+        budgets.forEach(budget => {            
+            budget.VlDocumento = numberFormat({value: budget.budget_value_total});
             if(budget.external_type === 'D'){
-                tmpDavs.push(data);
+                Davs.push(budget);
             } else {
-                tmpPedidos.push(data);
+                Pedidos.push(budget);
             }
         });
-        setDavs(tmpDavs);
-        setPedidos(tmpPedidos);
+        setDavs(Davs);
+        setPedidos(Pedidos);
     }
 
     useEffect(() => {
@@ -73,10 +59,10 @@ const Tabs = ({initBudget}) => {
             <button className="btn" style={styleButton1} onClick={() => setTab(1)}>CUPOM</button>
             <button className="btn" style={styleButton2} onClick={() => setTab(2)}>ORDEM DE ENTREGA</button>
             <div className="tab box-shadow" style={styleTab1}>
-                <DataGrid dataColumns={columns} dataRows={davs} setDataRow={setDataRow} />
+                <DataGridDocument columnBudgetTitle="DAV" dataRows={davs} setDataRow={setDataRow} />
             </div>
             <div className="tab box-shadow" style={styleTab2}>
-                <DataGrid dataColumns={columns} dataRows={pedidos} setDataRow={setDataRow}/>
+                <DataGridDocument columnBudgetTitle="PEDIDO" dataRows={pedidos} setDataRow={setDataRow}/>
             </div>
         </div>
     );

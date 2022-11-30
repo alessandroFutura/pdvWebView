@@ -1,8 +1,10 @@
 import React, {useContext}  from "react";
 
-import {Modal, Button} from 'rsuite';
-
 import Context from '../../contexts/Context.js';
+
+import { FiInfo, FiAlertTriangle } from 'react-icons/fi';
+
+import "./ModalMessage.css";
 
 const ModalMessage = () => {
     
@@ -10,6 +12,7 @@ const ModalMessage = () => {
     
     const handleModalClose = () => {
         setModalMessage({
+            class: '',
             title: '',
             message: '',
             opened: false
@@ -17,17 +20,21 @@ const ModalMessage = () => {
     }
 
     return (
-        <Modal open={modalMessage.opened} onClose={handleModalClose}>
-            <Modal.Header>
-                <Modal.Title>{modalMessage.title}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <div dangerouslySetInnerHTML={{__html: modalMessage.message}}></div>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => handleModalClose()} appearance="primary">Ok</Button>
-            </Modal.Footer>
-        </Modal>
+        <div style={{zIndex: modalMessage.zIndex || 10}} className={`shadow ${modalMessage.opened ? 'opened' : ''}`}>
+            <div className={`modal modal-message box-shadow ${modalMessage.class}`}>
+                <div className="header">
+                    <FiInfo/>
+                    <FiAlertTriangle/>
+                </div>
+                <div className="body">
+                    <div className="title">{modalMessage.title}</div>
+                    <div className="message" dangerouslySetInnerHTML={{__html: modalMessage.message}}></div>             
+                </div>
+                <div className="footer">
+                    <button onClick={(e) => handleModalClose()}>Fechar</button>
+                </div>
+            </div>
+        </div>
     )
 }
 

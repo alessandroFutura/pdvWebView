@@ -1,0 +1,78 @@
+.shadow .modal.modal-message
+{
+    width: 488px;
+    height: 380px;
+}
+
+.shadow .modal.modal-message .header
+{
+    height: 100px;
+    font-size: 60px;
+    text-align: center;
+}
+
+.shadow .modal.modal-message .header svg
+{
+    display: none;
+}
+
+.shadow .modal.modal-message .body
+{
+    top: 100px;
+    bottom: 88px;
+    padding: 40px;
+    text-align: center;
+}
+
+.shadow .modal.modal-message .body .title
+{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.shadow .modal.modal-message .body .message
+{
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.shadow .modal.modal-message .footer
+{
+    height: 88px;
+    padding: 20px;
+    text-align: center;
+}
+
+.shadow .modal.modal-message .footer button
+{
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    text-transform: uppercase;    
+}
+
+.shadow .modal.modal-message.info .header svg:nth-child(1),
+.shadow .modal.modal-message.danger .header svg:nth-child(2),
+.shadow .modal.modal-message.warning .header svg:nth-child(2)
+{
+    display: inline-block;
+}
+
+.shadow .modal.modal-message.danger .header,
+.shadow .modal.modal-message.danger .footer button
+{
+    background-color: #f44336;
+}
+
+.shadow .modal.modal-message.warning .header,
+.shadow .modal.modal-message.warning .footer button
+{
+    background-color: #ff9800;
+}
+
+.shadow .modal.modal-message.info .header,
+.shadow .modal.modal-message.info .footer button
+{
+    background-color: #03a9f4;
+}

@@ -1,11 +1,13 @@
 import React, {useContext}  from "react";
 
-import { Modal, Button } from 'rsuite';
-import {HelpOutline} from '@rsuite/icons';
+import { IoClose } from 'react-icons/io5';
+import { BsQuestionCircle, BsCheck2 } from 'react-icons/bs';
 
 import Context from '../../contexts/Context.js';
 
-const ModalConfirm = () => {
+import "./ModalConfirm.css";
+
+const ModalResponse = () => { 
     
     const {modalConfirm, setModalConfirm} = useContext(Context);
     
@@ -16,26 +18,31 @@ const ModalConfirm = () => {
             opened: false,
             confirmed: confirmed,
             buttonDenyText: modalConfirm.buttonDenyText,
-            buttonConfirmText: modalConfirm.buttonConfirmText
+            buttonConfirmText: modalConfirm.buttonConfirmText,
+            data: modalConfirm.data || null
         });
     }
 
     return (
-        <Modal backdrop="static" role="alertdialog" open={modalConfirm.opened} onClose={handleModalClose} size="xs">
-            <Modal.Body>
-                <HelpOutline style={{ fontSize: 24 }} />
-                {modalConfirm.message}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => handleModalClose(true)} appearance="primary">
-                    {modalConfirm.buttonConfirmText}
-                </Button>
-                <Button onClick={() => handleModalClose(false)} appearance="subtle">
-                    {modalConfirm.buttonDenyText}
-                </Button>
-            </Modal.Footer>
-        </Modal>
+        <div className={`shadow ${modalConfirm.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
+            <div className={`modal modal-confirm box-shadow`}>
+                <div className="header">
+                    <BsQuestionCircle/>
+                </div>
+                <div className="body">
+                    <p>{modalConfirm.message}</p>
+                </div>
+                <div className="footer">
+                    <button onClick={() => handleModalClose(false)}>
+                        <IoClose/> {modalConfirm.buttonDenyText}
+                    </button>
+                    <button onClick={() => handleModalClose(true)}>
+                        <BsCheck2/> {modalConfirm.buttonConfirmText}
+                    </button>
+                </div>
+            </div>
+        </div>
     )
-}
+};
 
-export default ModalConfirm;
+export default ModalResponse;

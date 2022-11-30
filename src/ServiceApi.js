@@ -17,7 +17,7 @@ class ServiceApi {
         }).catch((res) => {
             res.status = res.response.status;
             res.statusText = res.response.statusText;
-            this.error(params.data || null, res.response.data);                
+            this.error(params.data || null, res.response.data);              
             if(res.status === 401){
                 window.electronMessage('Unauthorized', 'appWindow');
             }

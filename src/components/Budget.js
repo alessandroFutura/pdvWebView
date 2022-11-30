@@ -6,7 +6,7 @@ import "./Budget.css";
 
 const Budget = () => {
     
-    const {budget, setModalConfirm} = useContext(Context);
+    const {budget, setModalPayment, setModalConfirm} = useContext(Context);
 
     const getPayment = () => {
         let payments = [];
@@ -25,7 +25,7 @@ const Budget = () => {
     }
 
     const handleButtonCancelClick = () => {
-        if(!budget.document || budget.document.cStat !== 100){
+        if(!budget.document || budget.document.CdStatus < 9){
             setModalConfirm({
                 id: 'budget-cancel',
                 message: 'Deseja realmente cancelar o faturamento?',
@@ -43,14 +43,9 @@ const Budget = () => {
     }
 
     const handleButtonSubmitClick = () => {
-        setModalConfirm({
-            id: 'budget-submit',
-            message: 'Deseja realmente faturar o documento?',
-            opened: true,
-            confirmed: false,
-            buttonDenyText: 'Não',
-            buttonConfirmText: 'Sim'
-        });
+        setModalPayment({
+            opened: true
+        });        
     }
 
     const deleteButtonDisabled = () => {
@@ -69,7 +64,7 @@ const Budget = () => {
     const submitButtonDisabled = () => {
         return (
             !budget.budget_id || 
-            (!!budget.document && budget.document.cStat === 100)
+            (!!budget.document && budget.document.CdStatus >= 9)
         );
     }
 

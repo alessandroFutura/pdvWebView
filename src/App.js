@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from "react";
 
 import moment from 'moment';
-import {Modal} from 'rsuite';
 import Api from './ServiceApi.js';
 import Context from './contexts/Context.js';
-
-
 
 import Header from './components/Header.js';
 import Tabs from './components/Tabs.js';
@@ -13,10 +10,11 @@ import Budget from './components/Budget.js';
 import Bar from './components/Bar.js';
 import Footer from './components/Footer.js';
 import Loading from "./components/Loading.js";
-// import ModalPayment from "./components/ModalPayment.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
+import ModalPayment from "./components/modal/ModalPayment.js";
 import ModalResponse from "./components/modal/ModalResponse.js";
+import ModalAuthorization from "./components/modal/ModalAuthorization.js";
 
 import './App.css';
 import './components/modal/Modal.css';
@@ -85,18 +83,29 @@ const App = () => {
     });
 
     const [filters, setFilters] = useState({
-        states: ['L'],
+        states: ['A'],
         company_id: null,
         reference: moment().format('YYYY-MM-DD')
     });
     
+    const [modalAuthorization, setModalAuthorization] = useState({
+        title: '',
+        action: '',
+        message: '',
+        opened: false,
+        buttonDenyText: '',
+        buttonConfirmText: '',
+        data: null
+    });
+
     const [modalConfirm, setModalConfirm] = useState({
         title: '',
         message: '',
         opened: false,
         confirmed: false,
         buttonDenyText: '',
-        buttonConfirmText: ''
+        buttonConfirmText: '',
+        data: null
     });
 
     const [modalMessage, setModalMessage] = useState({
@@ -112,27 +121,59 @@ const App = () => {
         opened: false
     });
 
+    const [modalPayment, setModalPayment] = useState({
+        opened: false
+    });
+
     const [loading, setLoading] = useState(0);
     const [budgets, setBudgets] = useState([]);
-    const [budget_id, setBudgetId] = useState(null); 
-    // const [modalData, setModalData] = useState({});
-    const [loadingStyle, setLoadingStyle] = useState({});    
+    const [budget_id, setBudgetId] = useState(null);     
+    const [loadingStyle, setLoadingStyle] = useState({});
     
     const [time, setTime] = useState(moment().format('HH:mm'));
     const [updateBeforeSend, setUpdateBeforeSend] = useState(false);
 
+    const afterModalAuthorized = () => {
+        switch(modalAuthorization.action){
+            case "documentCancel": 
+                cancelDocument(modalAuthorization.data); 
+            break;
+        }
+    };
+
     const afterModalConfirm = () => {
         switch(modalConfirm.id){
-            case 'budget-submit': if(updateBeforeSend) getBudget(); else submitBudget(); break;
-            case 'budget-cancel': initBudget(); break;
+            case 'budget-submit': 
+                if(updateBeforeSend){
+                    getBudget(); 
+                } else {
+                    submitBudget();
+                }
+            break;
+            case 'budget-cancel': 
+                initBudget(); 
+            break;
+            case 'document-cancel': 
+                setModalAuthorization({
+                    action: 'documentCancel',
+                    title: 'Autorização',
+                    message: 'Para cancelar o documento será necessário a autorização',
+                    opened: true,
+                    authorized: false,
+                    buttonDenyText: 'Cancelar',
+                    buttonConfirmText: 'Autorizar',
+                    data: modalConfirm.data
+                });
+            break;
             default: break;
         }
     }
 
-    const apiErrorMessage = () => {
+    const apiErrorMessage = (data) => {
         setModalMessage({
-            title: 'Atenção!',
-            message: '<p>Resposta inesperada do servidor.</p>',
+            class: 'danger',
+            title: !!data && !!data.title ? data.title : 'Atenção!',
+            message: !!data && !!data.message ? data.message :'Resposta inesperada do servidor.',
             opened: true
         });
     }
@@ -177,6 +218,7 @@ const App = () => {
                 setBudgets(res.data);
             } else {
                 setModalMessage({
+                    class: 'warning',
                     title: 'Atenção!',
                     message: 'Resposta inesperada do servidor.',
                     opened: true
@@ -185,6 +227,30 @@ const App = () => {
             setLoading(loading => loading-1);
         });
     };
+
+    const cancelDocument = (data) => {
+        initBudget();
+        setLoading(loading => loading+1);
+        Api.post({script: 'document', action: 'cancel', data: data}).then((res) => {
+            if(res.status === 200){
+                getBudgets();
+                setModalResponse({
+                    class: 'success',
+                    title: res.data.nNF,
+                    message: 'Documento cancelado com sucesso!',
+                    opened: true
+                });
+            } else {
+                setModalMessage({
+                    class: 'warning',
+                    title: !!res.response && !!res.response.data && !!res.response.data.title ? res.response.data.title : 'Atenção!',
+                    message: !!res.response && !!res.response.data && !!res.response.data.message ? res.response.data.message : 'Resposta inesperada do servidor.',
+                    opened: true
+                });
+            }
+            setLoading(loading => loading-1);
+        });
+    }
 
     const initBudget = () => {
         setBudget({
@@ -232,7 +298,7 @@ const App = () => {
         let data = budget;
         data.company = company;
         setLoading(loading => loading+1);
-        Api.post({script: 'budget', action: 'submit' + (budget.external_type === 'D' ? 'DAV' : 'Pedido'), data: data}).then((res) => {
+        Api.post({script: 'document', action: 'submit' + (budget.external_type === 'D' ? 'NFCe' : 'OE'), data: data}).then((res) => {
             if(res.status === 200){
                 getBudgets();
                 setModalResponse({
@@ -240,11 +306,11 @@ const App = () => {
                     title: res.data.NrDocumento,
                     message: 'Documento faturado com sucesso!',
                     opened: true
-                });                  
+                });
             } else {
                 setModalResponse({
                     class: 'error',
-                    title: 'Ops!',
+                    title: res.response.data.title || 'Atenção',
                     message: res.response.data.message,
                     opened: true
                 });
@@ -271,15 +337,7 @@ const App = () => {
     useEffect(() => {
         if(!!filters.company_id){
             initBudget();
-            if(filters.states.length > 0){
-                getBudgets();
-            } else {
-                setModalMessage({
-                    title: 'Atenção!',
-                    message: 'Pelo menos um status deverá ser selecionado.',
-                    opened: true
-                })
-            }
+            getBudgets();
         }
     }, [filters]);
 
@@ -295,18 +353,27 @@ const App = () => {
         }
     }, [modalConfirm]);
 
+    useEffect(() => {
+        if(modalAuthorization.authorized){
+            afterModalAuthorized();
+        }
+    }, [modalAuthorization]);
+
     return (
         <Context.Provider value={{
             time,
             user,
             budget,
             budgets,
+            setLoading,
             company, setCompany, 
             filters, setFilters,
             budget_id, setBudgetId,
             modalConfirm, setModalConfirm,
             modalMessage, setModalMessage,
+            modalPayment, setModalPayment,
             modalResponse, setModalResponse,
+            modalAuthorization, setModalAuthorization
         }}>
             <Header/>
             <div className="body">
@@ -315,10 +382,11 @@ const App = () => {
             </div>
             <Bar/>
             <Footer/>
-            <Modal/>
             <ModalConfirm/>
             <ModalMessage/>
+            <ModalPayment/>
             <ModalResponse/>
+            <ModalAuthorization/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>
     );

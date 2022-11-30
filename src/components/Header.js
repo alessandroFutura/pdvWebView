@@ -29,13 +29,19 @@ const Header = () => {
     );
 
     const handleAbout = () => {
+        // setModalResponse({
+        //     class: 'success',
+        //     title: '000000019',
+        //     message: 'Documento faturado com sucesso!',
+        //     opened: true
+        // });
         setModalResponse({
-            class: 'success',
-            title: 'Sucesso!',
-            message: 'Documento faturado com sucesso!',
+            class: 'error',
+            title: 'Rejeição 502',
+            message: 'Erro na Chave de Acesso - Campo Id não corresponde à concatenação dos campos correspondentes',
             opened: true
         });
-        //window.postMessage('about');
+        // window.postMessage('about');
     }
 
     const handleButtonRefrehClick = () => {
@@ -54,6 +60,7 @@ const Header = () => {
                     <label>DATA</label>
                     <Stack direction="column" alignItems="flex-start" spacing={6}>
                         <DatePicker 
+                            oneTap={true}
                             cleanable={false}
                             format="dd/MM/yyyy"
                             defaultValue={new Date()}
@@ -88,7 +95,7 @@ const Header = () => {
                         <Toggle defaultChecked onChange={(checked) => {
                             setFilters({
                                 company_id: filters.company_id,
-                                states: checked ? filters.states.concat(['L']) : (filters.states.length === 1 ? [] : ['B']),
+                                states: checked ? filters.states.concat(['A']) : (filters.states.length === 1 ? [] : ['F']),
                                 reference: filters.reference
                             })
                         }}/><b>Abertos</b>
@@ -97,7 +104,7 @@ const Header = () => {
                         <Toggle onChange={(checked) => {
                             setFilters({
                                 company_id: filters.company_id,
-                                states: checked ? filters.states.concat(['B']) : (filters.states.length === 1 ? [] : ['L']),
+                                states: checked ? filters.states.concat(['F']) : (filters.states.length === 1 ? [] : ['A']),
                                 reference: filters.reference
                             })
                         }}/><b>Faturados</b>

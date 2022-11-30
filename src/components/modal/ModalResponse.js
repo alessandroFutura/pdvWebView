@@ -1,26 +1,13 @@
 import React, {useContext, useEffect, useState, useRef} from "react";
 
 import { BsCheck2Circle } from 'react-icons/bs';
+import { FiAlertTriangle } from 'react-icons/fi';
 
 import Context from '../../contexts/Context.js';
 
 import "./ModalResponse.css";
 
-const ModalResponse = () => {
-    
-    useEffect(() => {
-        if(modalResponse.opened && modalResponse.class === 'success'){
-            if(modalResponseTimeout == 0){
-                handleCloseClick();
-            } else {
-                if(!!modalResponseTimer.current) clearInterval(modalResponseTimer.current);
-                modalResponseTimer.current = setInterval(function(){
-                    setModalResponseTimeout(() => modalResponseTimeout - 1);
-                }, 1000);
-            }
-            window.document.getElementById('button-modal-response').focus();
-        }
-    }, modalResponse);
+const ModalResponse = () => {    
     
     const modalResponseTimer = useRef(null);
     const [modalResponseTimeout, setModalResponseTimeout] = useState(10);
@@ -38,11 +25,26 @@ const ModalResponse = () => {
         setModalResponseTimeout(10);
     };
 
+    useEffect(() => {
+        if(modalResponse.opened && modalResponse.class === 'success'){
+            if(modalResponseTimeout === 0){
+                handleCloseClick();
+            } else {
+                if(!!modalResponseTimer.current) clearInterval(modalResponseTimer.current);
+                modalResponseTimer.current = setInterval(() => {
+                    setModalResponseTimeout(() => modalResponseTimeout - 1);
+                }, 1000);
+            }
+            window.document.getElementById('button-modal-response').focus();
+        }
+    }, [modalResponse]);
+
     return (
         <div className={`shadow ${modalResponse.opened ? 'opened' : ''}`}>
             <div className={`modal modal-response box-shadow ${modalResponse.class}`}>
                 <div className="header">
                     <BsCheck2Circle/>
+                    <FiAlertTriangle/>
                 </div>
                 <div className="body">
                     <div className="title">{modalResponse.title}</div>
