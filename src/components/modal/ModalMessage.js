@@ -2,6 +2,7 @@ import React, {useContext}  from "react";
 
 import Context from '../../contexts/Context.js';
 
+import { BsCheck2Circle } from 'react-icons/bs';
 import { FiInfo, FiAlertTriangle } from 'react-icons/fi';
 
 import "./ModalMessage.css";
@@ -24,6 +25,7 @@ const ModalMessage = () => {
             <div className={`modal modal-message box-shadow ${modalMessage.class}`}>
                 <div className="header">
                     <FiInfo/>
+                    <BsCheck2Circle/>
                     <FiAlertTriangle/>
                 </div>
                 <div className="body">

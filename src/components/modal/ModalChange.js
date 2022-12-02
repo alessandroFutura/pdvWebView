@@ -1,79 +1,90 @@
-import React, {useContext}  from "react";
+import React, {useContext, useState, useEffect}  from "react";
 
-import { Form } from 'rsuite';
+import { Form, InputNumber } from 'rsuite';
 
-import { IoClose } from 'react-icons/io5';
-import { BsCheck2 } from 'react-icons/bs';
-import { FaUserLock } from 'react-icons/fa';
+import { RiExchangeDollarFill } from 'react-icons/ri';
 
-import Api from './../../ServiceApi.js';
 import Context from '../../contexts/Context.js';
+import {numberFormat} from '../../contexts/Global.js';
 
 import "./ModalChange.css";
 
 const ModalChange = () => { 
     
-    const {user, setLoading, modalAuthorization, setModalMessage, setModalAuthorization} = useContext(Context);
+    const {modalChange, setModalChange} = useContext(Context);
     
-    const handleModalClose = (authorized) => {
-        setModalAuthorization({
-            action: modalAuthorization.action,
-            message: modalAuthorization.message,
-            opened: false,
-            authorized: authorized,
-            buttonDenyText: modalAuthorization.buttonDenyText,
-            buttonConfirmText: modalAuthorization.buttonConfirmText,
-            data: modalAuthorization.data || null
-        });
-    }
+    const [paidValue, setPaidValue] = useState(0);
+    const [changeValue, setChangeValue] = useState(0);
 
-    const handleFormSubmit = () => {
-        let user_name = document.getElementById('user-name').value;
-        let user_pass = document.getElementById('user-pass').value;
-        if(!!user_name && !!user_pass) {
-            submit(user_name, user_pass);
-        } else {
-            setModalMessage({
-                class: 'warning',
-                title: 'Ops!',
-                message: 'Informe o login e senha',
-                zIndex: 11,
-                opened: true
-            });
+    useEffect(() => {
+        if(modalChange.opened){
+            setPaidValue(0);
+            setTimeout(() => {
+                document.getElementById('paid-value').focus();
+                document.getElementById('paid-value').select();
+            },300);
         }
+    }, [modalChange]);
+
+    useEffect(() => {
+        let changeValue = 0;
+        let tmpPaidValue = paidValue.toString().replace(',','.');
+        if(isNaN(Number(tmpPaidValue))){
+            setPaidValue(0);   
+        } else {
+            changeValue = parseFloat(tmpPaidValue) - modalChange.chargedValue;
+            setChangeValue(changeValue > 0 ? changeValue : 0);
+        }
+    }, [paidValue]);
+    
+    const handleChange = (value) => {
+        setPaidValue(value);
     }
 
-    const submit = (user_name, user_pass) => {
-        
+    const handleKeyUp = (e) => {
+        if(e.keyCode === 13){
+            // 13 : ENTER
+            setModalChange({
+                opened: paidValue === 0,
+                paidValue: parseFloat(paidValue),
+                changeValue: changeValue,
+                chargedValue: modalChange.chargedValue
+            });
+        } 
+        if(e.keyCode === 27){
+            // 27 : ESC
+            setModalChange({
+                opened: false,
+                paidValue: 0,
+                changeValue: 0,
+                chargedValue: 0
+            });
+        }        
     }
 
     return (
-        <div className={`shadow ${modalAuthorization.opened ? 'opened' : ''}`}>
-            <div className={`modal modal-authorization box-shadow`}>
+        <div className={`shadow ${modalChange.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
+            <div className={`modal modal-change box-shadow`}>
                 <div className="header">
-                    <FaUserLock/>
+                    <RiExchangeDollarFill/>
                 </div>
                 <div className="body">
-                    <p>{modalAuthorization.message}</p>
                     <Form>
-                        <Form.Group controlId="user-name">
-                            <Form.ControlLabel>Usuário</Form.ControlLabel>
-                            <Form.Control name="user-name" />
+                        <Form.Group controlId="charged-value">
+                            <Form.ControlLabel>Valor Devido</Form.ControlLabel>
+                            <Form.Control disabled={true} name="charged-value" value={numberFormat({value: modalChange.chargedValue})}  style={{width: 120}}/>
                         </Form.Group>
-                        <Form.Group controlId="user-pass">
-                            <Form.ControlLabel>Senha</Form.ControlLabel>
-                            <Form.Control name="user-pass" type="password" autoComplete="off" />
+                        <Form.Group controlId="paid-value">
+                            <Form.ControlLabel>Valor Recebido</Form.ControlLabel>
+                            {/* <Form.Control onChange={(value, event) => handleChange(value, event)} name="paid-value" value={paidValue} style={{width: 120}}/> */}
+                            <InputNumber onKeyUp={(e) => handleKeyUp(e)} value={paidValue} onChange={(value) => handleChange(value)} step={0.01} />
+                        </Form.Group>
+                        <Form.Group controlId="change-value">
+                            <Form.ControlLabel>Valor do Troco</Form.ControlLabel>
+                            <Form.Control disabled={true} name="change-value" value={numberFormat({value: changeValue})} style={{width: 120}}/>
                         </Form.Group>
                     </Form>
-                </div>
-                <div className="footer">
-                    <button onClick={() => handleModalClose(false)}>
-                        <IoClose/> {modalAuthorization.buttonDenyText}
-                    </button>
-                    <button onClick={() => handleFormSubmit(true)}>
-                        <BsCheck2/> {modalAuthorization.buttonConfirmText}
-                    </button>
-                </div>
+                </div>                
             </div>
         </div>
     )

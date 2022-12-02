@@ -10,10 +10,10 @@ import Budget from './components/Budget.js';
 import Bar from './components/Bar.js';
 import Footer from './components/Footer.js';
 import Loading from "./components/Loading.js";
+import ModalChange from "./components/modal/ModalChange.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
 import ModalPayment from "./components/modal/ModalPayment.js";
-import ModalResponse from "./components/modal/ModalResponse.js";
 import ModalAuthorization from "./components/modal/ModalAuthorization.js";
 
 import './App.css';
@@ -103,6 +103,13 @@ const App = () => {
         data: null
     });
 
+    const [modalChange, setModalChange] = useState({
+        opened: false,
+        paidValue: 0,
+        changeValue: 0,
+        chargedValue: 0
+    });
+
     const [modalConfirm, setModalConfirm] = useState({
         title: '',
         message: '',
@@ -133,24 +140,29 @@ const App = () => {
     const [loading, setLoading] = useState(0);
     const [budgets, setBudgets] = useState([]);
     const [budget_id, setBudgetId] = useState(null);     
-    const [loadingStyle, setLoadingStyle] = useState({});
-    
+    const [loadingStyle, setLoadingStyle] = useState({});    
     const [time, setTime] = useState(moment().format('HH:mm'));
-    const [updateBeforeSend, setUpdateBeforeSend] = useState(false);
 
     const afterModalAuthorized = () => {
         switch(modalAuthorization.action){
             case "documentCancel": 
                 cancelDocument(modalAuthorization.data); 
             break;
+            default: break;
         }
     };
 
     const afterModalConfirm = () => {
         switch(modalConfirm.id){
             case 'budget-submit': 
-                if(updateBeforeSend){
-                    getBudget(); 
+                let moneyValue = getMoneyValue();
+                if(moneyValue > 0){
+                    setModalChange({
+                        opened: true,
+                        paidValue: 0,
+                        changeValue: 0,
+                        chargedValue: moneyValue
+                    });
                 } else {
                     submitBudget();
                 }
@@ -183,6 +195,30 @@ const App = () => {
         });
     }
 
+    const cancelDocument = (data) => {
+        initBudget();
+        setLoading(loading => loading+1);
+        Api.post({script: 'document', action: 'cancel', data: data}).then((res) => {
+            if(res.status === 200){
+                getBudgets();
+                setModalResponse({
+                    class: 'success',
+                    title: res.data.nNF,
+                    message: 'Documento cancelado com sucesso!',
+                    opened: true
+                });
+            } else {
+                setModalMessage({
+                    class: 'warning',
+                    title: !!res.response && !!res.response.data && !!res.response.data.title ? res.response.data.title : 'Atenção!',
+                    message: !!res.response && !!res.response.data && !!res.response.data.message ? res.response.data.message : 'Resposta inesperada do servidor.',
+                    opened: true
+                });
+            }
+            setLoading(loading => loading-1);
+        });
+    }
+    
     const getUser = () => {
         setLoading(loading => loading+1);
         Api.post({script: 'user', action: 'get'}).then((res) => {
@@ -205,9 +241,6 @@ const App = () => {
         }}).then((res) => {
             if(res.status === 200){
                 setBudget(res.data);
-                if(updateBeforeSend){
-                    submitBudget();
-                }
             } else {
                 apiErrorMessage();
             }
@@ -233,29 +266,12 @@ const App = () => {
         });
     };
 
-    const cancelDocument = (data) => {
-        initBudget();
-        setLoading(loading => loading+1);
-        Api.post({script: 'document', action: 'cancel', data: data}).then((res) => {
-            if(res.status === 200){
-                getBudgets();
-                setModalResponse({
-                    class: 'success',
-                    title: res.data.nNF,
-                    message: 'Documento cancelado com sucesso!',
-                    opened: true
-                });
-            } else {
-                setModalMessage({
-                    class: 'warning',
-                    title: !!res.response && !!res.response.data && !!res.response.data.title ? res.response.data.title : 'Atenção!',
-                    message: !!res.response && !!res.response.data && !!res.response.data.message ? res.response.data.message : 'Resposta inesperada do servidor.',
-                    opened: true
-                });
-            }
-            setLoading(loading => loading-1);
+    const getMoneyValue = () => {
+        let payment = budget.payments.filter((payment) => {
+            return payment.modality_id === '00A0000001'
         });
-    }
+        return payment.length > 0 ? payment[0].budget_payment_value : 0
+    }    
 
     const initBudget = () => {
         setBudget({
@@ -295,7 +311,6 @@ const App = () => {
             }
         });
         setBudgetId(null);
-        setUpdateBeforeSend(false);
     }
 
     const showLoading = () => {
@@ -307,24 +322,29 @@ const App = () => {
     const submitBudget = () => {
         let data = budget;
         data.company = company;
+        data.change = {
+            paidValue: modalChange.paidValue,
+            changeValue: modalChange.changeValue,
+            chargedValue: modalChange.chargedValue
+        };
         setLoading(loading => loading+1);
+        setModalPayment({opened: false});
         Api.post({script: 'document', action: 'submit' + (budget.external_type === 'D' ? 'NFCe' : 'OE'), data: data}).then((res) => {
             if(res.status === 200){
                 getBudgets();
-                setModalResponse({
+                setModalMessage({
                     class: 'success',
                     title: res.data.NrDocumento,
                     message: 'Documento faturado com sucesso!',
                     opened: true
                 });
             } else {
-                setModalResponse({
-                    class: 'error',
+                setModalMessage({
+                    class: 'danger',
                     title: res.response.data.title || 'Atenção',
                     message: res.response.data.message,
                     opened: true
                 });
-                setUpdateBeforeSend(true);
             }
             setLoading(loading => loading-1);
         });
@@ -358,6 +378,12 @@ const App = () => {
     }, [budget_id]);
 
     useEffect(() => {
+        if(!modalChange.opened && modalChange.paidValue > 0){
+            submitBudget();
+        }
+    }, [modalChange]);
+
+    useEffect(() => {
         if(modalConfirm.confirmed){
             afterModalConfirm();
         }
@@ -379,6 +405,7 @@ const App = () => {
             company, setCompany, 
             filters, setFilters,
             budget_id, setBudgetId,
+            modalChange, setModalChange,
             modalConfirm, setModalConfirm,
             modalMessage, setModalMessage,
             modalPayment, setModalPayment,
@@ -392,10 +419,10 @@ const App = () => {
             </div>
             <Bar/>
             <Footer/>
+            <ModalChange/>
             <ModalConfirm/>
             <ModalMessage/>
             <ModalPayment/>
-            <ModalResponse/>
             <ModalAuthorization/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>

@@ -86,9 +86,9 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 
 	const handleButtonInfoClick = (data) => {
 		setModalMessage({
-			class: data.StCancelado == 'S' ? 'info' : 'danger',
-			title: data.StCancelado == 'S' ? 'Documento cancelado' : `Rejeição ${data.cStat}`,
-			message: data.StCancelado == 'S' ? (`
+			class: data.StCancelado === 'S' ? 'info' : 'danger',
+			title: data.StCancelado === 'S' ? 'Documento cancelado' : `Rejeição ${data.cStat}`,
+			message: data.StCancelado === 'S' ? (`
 				Data: ${moment(data.DtCancelamento).format('DD/MM/YYYY HH:mm:ss')}<br/>
 				Autorização: ${data.NmUsuarioCancelamento}
 			`) : data.xMotivo,

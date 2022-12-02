@@ -59,6 +59,12 @@
     display: inline-block;
 }
 
+.shadow .modal.modal-message.success .header,
+.shadow .modal.modal-message.success .footer button
+{
+    background-color: #4caf50;
+}
+
 .shadow .modal.modal-message.danger .header,
 .shadow .modal.modal-message.danger .footer button
 {

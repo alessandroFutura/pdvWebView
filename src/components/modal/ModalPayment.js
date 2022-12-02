@@ -13,7 +13,7 @@ import "./ModalPayment.css";
 
 const ModalPayment = () => {    
     
-    const {budget, modalPayment, setModalConfirm, setModalPayment, setModalMessage} = useContext(Context);
+    const {budget, modalPayment, setModalConfirm, setModalPayment} = useContext(Context);
 
     const handleCloseClick = () => {
         setModalPayment({
@@ -22,31 +22,15 @@ const ModalPayment = () => {
     };
 
     const handleSubmitClick = () => {
-        if(hasMoney()){
-            setModalMessage({
-                class: 'warning',
-                title: 'Teste',
-                zIndex: 11,
-                message: 'Exibir tela de troco',
-                opened: true
-            });
-        } else {
-            setModalConfirm({
-                id: 'budget-submit',
-                message: 'Deseja realmente faturar o documento?',
-                opened: true,
-                confirmed: false,
-                buttonDenyText: 'Não',
-                buttonConfirmText: 'Sim'
-            });
-        }
-    };
-
-    const hasMoney = () => {
-        return budget.payments.filter((payment) => {
-            return payment.modality_id === '00A0000001'
-        }).length > 0;
-    }
+        setModalConfirm({
+            id: 'budget-submit',
+            message: 'Deseja realmente faturar o documento?',
+            opened: true,
+            confirmed: false,
+            buttonDenyText: 'Não',
+            buttonConfirmText: 'Sim'
+        });
+    };    
 
     return (
         <div className={`shadow ${modalPayment.opened ? 'opened' : ''}`}>
