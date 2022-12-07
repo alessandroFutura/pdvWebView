@@ -1,0 +1,152 @@
+.print-nfce
+{
+    width: 89mm;
+    color: #333;
+    padding: 15px;
+    font-size: 12px;
+    overflow: hidden;
+    margin: 10px auto;
+    line-height: 12px;
+    text-align: center;
+    position: relative;
+    font-family: Roboto;
+    text-transform: uppercase;
+    background-color: #FFF5BF;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.print-nfce .text-left
+{
+    text-align: left;
+}
+
+.print-nfce .text-right
+{
+    text-align: right;
+}
+
+.print-nfce .text-center
+{
+    text-align: center;
+}
+
+.print-nfce table
+{
+    width: 100%;
+    font-size: 10px;
+}
+
+.print-nfce table tr th
+{
+    padding: 2px 0;
+}
+
+.print-nfce .header-info
+{
+    font-size: 11px;
+    text-align: center;
+}
+
+.print-nfce .logo
+{
+    margin: 20px;
+}
+
+.print-nfce .logo img
+{
+    max-width: 100%;
+    max-height: 85px;
+}
+
+.print-nfce .divider
+{
+    width: 100%;
+    height: 1px;
+    margin: 6px 0;
+    border-bottom: 1px dashed #333;
+}
+
+.print-nfce .company-name
+{
+    font-weight: bold;
+}
+
+.print-nfce .document-code td
+{
+    text-transform: none;
+}
+
+.print-nfce .separator
+{
+    font-weight: bold;
+}
+
+.print-nfce .person
+{
+    text-align: center;
+}
+
+.print-nfce .items tr td:nth-child(2)
+{
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.print-nfce .items tbody tr:nth-child(even) td
+{
+    padding-bottom: 8px;
+}
+
+.print-nfce .nfce-info
+{
+    font-size: 11px;
+    text-transform: none;
+}
+
+.print-nfce .qr-code
+{
+    margin: 10px auto;
+}
+
+.print-nfce .ibpt
+{
+    font-size: 11px;
+    text-transform: none;
+}
+
+.print-nfce .cpl
+{
+    font-size: 11px;
+    margin-top: 5px;
+    text-transform: none;
+}
+
+.print-nfce th
+{
+    font-size: 10px;
+}
+
+@media print
+{
+    .print-nfce
+    {
+        margin: 0;
+        width: 80mm;
+        padding: 5mm;
+        font-size: 8px;
+        margin-left: -5mm;
+        background-color: transparent;
+    }
+    .print-nfce .header-info,
+    .print-nfce .nfce-info,
+    .print-nfce .ibpt,
+    .print-nfce .cpl
+    {
+        font-size: 9px;
+    }
+    .print-nfce th,
+    .print-nfce table
+    {
+        font-size: 8px;
+    }
+}

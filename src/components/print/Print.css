@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.button-print,
+.button-print-close
+{
+    right: 40px;
+    width: 56px;
+    height: 56px;
+    color: #fff;
+    padding: 14px;
+    position: fixed;
+    font-size: 24px;
+    border-radius: 50% !important;
+}
+
+.button-print
+{
+    bottom: 94px;
+    background-color: #ff9800;
+}
+
+.button-print-close
+{
+    bottom: 20px;
+    background-color: #f44336;
+}
+
+@media print
+{
+    .bar,
+    .body,
+    button,
+    .header,
+    .footer
+    {
+        display: none !important;
+    }
+    .shadow
+    {
+        position: relative;
+        overflow-y: hidden;
+        background-color: transparent;
+    }
+    body
+    {
+        background-image: none;
+        background-color: transparent;
+    }
+}
+
+@page
+{
+    margin: 0;
+    padding: 0;
+    width: 80mm;
+}

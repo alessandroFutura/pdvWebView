@@ -16,11 +16,13 @@
   </body>
   <script type="text/javascript">
     function electronMessage(message, data){
-		try {
-			require('electron').ipcRenderer.postMessage(message, data || null);
-		} catch (e) {
-			
-		}
+      let success = true;
+      try {
+        require('electron').ipcRenderer.postMessage(message, data || null);
+      } catch (e) {
+        success = false;
+      }
+      return success;
 	}
   </script>
 </html>

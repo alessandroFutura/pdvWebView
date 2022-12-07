@@ -66,3 +66,28 @@ button.btn:disabled
     position: fixed;
     max-width: 1200px;
 }
+
+.shadow
+{
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;    
+    z-index: 10;
+    display: none;
+    position: fixed;
+    transition: all .3s ease;
+    background-color: rgba(0,0,0,.5);
+}
+
+.shadow.opened
+{
+    opacity: 1;
+    display: block;
+}
+
+.overflow-y
+{
+    overflow-y: auto;
+}

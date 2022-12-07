@@ -10,6 +10,7 @@ import Budget from './components/Budget.js';
 import Bar from './components/Bar.js';
 import Footer from './components/Footer.js';
 import Loading from "./components/Loading.js";
+import PrintNFCe from './components/print/PrintNFCe.js';
 import ModalChange from "./components/modal/ModalChange.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
@@ -18,6 +19,7 @@ import ModalAuthorization from "./components/modal/ModalAuthorization.js";
 
 import './App.css';
 import './components/modal/Modal.css';
+import './components/print/Print.css';
 
 const App = () => {    
     
@@ -28,69 +30,123 @@ const App = () => {
         },1000)
     },[]);
 
-    const [user, setUser] = useState({
-        image: '',
-        user_id: '',
-        person_id: '',
-        user_active: '',
-        user_name: '',
-        access: {},
-        terminal: {},
-        companies: []
-    });
+    const getEmptyBudget = () => {
+        return {
+            term_id: '',
+            budget_id: '',
+            client_id: '',
+            seller_id: '',
+            company_id: '',
+            budget_value: '',
+            document_code: '',
+            external_type: '',
+            budget_value: 0,
+            budget_value_total: 0,
+            budget_value_discount: 0,
+            term: {
+                IdPrazo: '',
+                CdChamada: '',
+                DsPrazo: ''
+            },
+            items: [],
+            payments: [],
+            person: {
+                image: '',
+                IdPessoa: '',
+                CdChamada: '',
+                NmPessoa: ''
+            },
+            seller: {
+                image: '',
+                IdPessoa: '',
+                CdChamada: '',
+                NmPessoa: ''
+            },
+            external: {
+                StAgendaEntrega: '',
+                DsObservacaoPedido: '',
+                DsObservacaoDocumento: ''
+            },
+            document: {
+                vFedTrib: 0,
+                vEstTrib: 0,
+                vMunTrib: 0,
+                vlPago: 0,
+                vlTroco: 0,
+                vlCobrado: 0,
+                chNFe: '',
+                nProt: '',
+                dhRecbto: ''
+            }
+        };
+    };
 
-    const [company, setCompany] = useState({
-        image: '',
-        parent_id: '',
-        company_id: '',
-        company_code: '',
-        company_name: '',
-        company_color: '',
-        user_company_main: '',
-        company_short_name: ''
-    });
+    const getEmptyCompany = () => {
+        return {
+            image: 'null',
+            company_id: 'null',
+            company_code: 'null',
+            company_name: 'null',
+            company_color: 'null',
+            company_short_name: '',
+            user_company_main: 'null',
+            company_sector_id: 'null',
+            external: {
+                NrCGC: 'null',
+                NmEmpresa: 'null',
+                CdUF: 'null',
+                CdIBGE: 'null',
+                TpLogradouro: '',
+                DsEndereco: 'null',
+                NrLogradouro: 'null',
+                NmBairro: 'null',
+                NmCidade: 'null',
+                NrCEP: 'null',
+                NrTelefone: 'null',
+                NrInscrEstadual: 'null',
+                TpRegimeEspecialTributacao: 'null',
+                AlCreditoICMSSN: 'null',
+                CSOSNEmpresa: 'null',
+                CSOSNEmpresaPDV: 'null',
+                AlFCP: 'null',
+                IdContaBancariaCaixa: 'null'
+            }
+        };
+    }
 
-    const [budget, setBudget] = useState({
-        term_id: '',
-        budget_id: '',
-        client_id: '',
-        seller_id: '',
-        company_id: '',
-        budget_value: '',
-        document_code: '',
-        external_type: '',
-        budget_value_total: '',
-        budget_value_discount: '',
-        term: {
-            IdPrazo: '',
-            CdChamada: '',
-            DsPrazo: ''
-        },
-        items: [],
-        payments: [],
-        person: {
+    const getEmptyUser = () => {
+        return {
             image: '',
-            IdPessoa: '',
-            CdChamada: '',
-            NmPessoa: ''
-        },
-        seller: {
-            image: '',
-            IdPessoa: '',
-            CdChamada: '',
-            NmPessoa: ''
-        },
-        external: {
-            StAgendaEntrega: '',
-            DsObservacaoPedido: '',
-            DsObservacaoDocumento: ''
-        }
-    });
+            user_id: '',
+            person_id: '',
+            user_active: '',
+            user_name: '',
+            access: {},
+            terminal: {},
+            companies: []
+        };
+    }
+
+    const [loading, setLoading] = useState(0);
+    const [budgets, setBudgets] = useState([]);
+    const [budget_id, setBudgetId] = useState(null);     
+    const [loadingStyle, setLoadingStyle] = useState({});    
+    const [time, setTime] = useState(moment().format('HH:mm'));    
+    
+    const [user, setUser] = useState(getEmptyUser());
+    const [budget, setBudget] = useState(getEmptyBudget());
+    const [company, setCompany] = useState(getEmptyCompany());        
 
     const [filters, setFilters] = useState({
         states: ['A'],
         company_id: null,
         reference: moment().format('YYYY-MM-DD')
+    });
+
+    const [printNFCe, setPrintNFCe] = useState({
+        budget: getEmptyBudget(),
+        opened: false,
+        budget_id: null
     });
     
     const [modalAuthorization, setModalAuthorization] = useState({
@@ -136,12 +192,6 @@ const App = () => {
     const [modalPayment, setModalPayment] = useState({
         opened: false
     });
-
-    const [loading, setLoading] = useState(0);
-    const [budgets, setBudgets] = useState([]);
-    const [budget_id, setBudgetId] = useState(null);     
-    const [loadingStyle, setLoadingStyle] = useState({});    
-    const [time, setTime] = useState(moment().format('HH:mm'));
 
     const afterModalAuthorized = () => {
         switch(modalAuthorization.action){
@@ -234,13 +284,20 @@ const App = () => {
         });
     };
 
-    const getBudget = () => {
+    const getBudget = (budget_id) => {
         setLoading(loading => loading+1);
         Api.post({script: 'budget', action: 'get', data: {
             budget_id: budget_id
         }}).then((res) => {
             if(res.status === 200){
-                setBudget(res.data);
+                if(printNFCe.opened){
+                    setPrintNFCe({
+                        budget: res.data,
+                        opened: true
+                    });
+                } else {
+                    setBudget(res.data);
+                }                
             } else {
                 apiErrorMessage();
             }
@@ -274,44 +331,13 @@ const App = () => {
     }    
 
     const initBudget = () => {
-        setBudget({
-            term_id: '',
-            budget_id: '',
-            client_id: '',
-            seller_id: '',
-            company_id: '',
-            budget_value: '',
-            document_code: '',
-            external_type: '',
-            budget_value_total: '',
-            budget_value_discount: '',
-            term: {
-                IdPrazo: '',
-                CdChamada: '',
-                DsPrazo: ''
-            },
-            items: [],
-            payments: [],
-            person: {
-                image: '',
-                IdPessoa: '',
-                CdChamada: '',
-                NmPessoa: ''
-            },
-            seller: {
-                image: '',
-                IdPessoa: '',
-                CdChamada: '',
-                NmPessoa: ''
-            },
-            external: {
-                StAgendaEntrega: '',
-                DsObservacaoPedido: '',
-                DsObservacaoDocumento: ''
-            }
-        });
+        setBudget(getEmptyBudget());
         setBudgetId(null);
-    }
+        setPrintNFCe({
+            opened: false,
+            budget: getEmptyBudget()
+        });
+    }    
 
     const showLoading = () => {
         setLoadingStyle({
@@ -373,9 +399,15 @@ const App = () => {
 
     useEffect(() => {
         if(!!budget_id){
-            getBudget();
+            getBudget(budget_id);
         }
     }, [budget_id]);
+
+    useEffect(() => {
+        if(printNFCe.opened && !!printNFCe.budget_id){
+            getBudget(printNFCe.budget_id);
+        }
+    }, [printNFCe]);
 
     useEffect(() => {
         if(!modalChange.opened && modalChange.paidValue > 0){
@@ -400,11 +432,11 @@ const App = () => {
             time,
             user,
             budget,
-            budgets,
-            setLoading,
+            budgets, setLoading,
             company, setCompany, 
             filters, setFilters,
             budget_id, setBudgetId,
+            printNFCe, setPrintNFCe,
             modalChange, setModalChange,
             modalConfirm, setModalConfirm,
             modalMessage, setModalMessage,
@@ -419,6 +451,7 @@ const App = () => {
             </div>
             <Bar/>
             <Footer/>
+            <PrintNFCe getEmptyBudget={getEmptyBudget}/>
             <ModalChange/>
             <ModalConfirm/>
             <ModalMessage/>

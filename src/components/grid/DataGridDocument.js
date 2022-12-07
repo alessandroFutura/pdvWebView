@@ -26,7 +26,7 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
         {width:80, dataKey:'VlDocumento', HeaderCell:'VALOR'}
     ];
 
-	const {budget_id, setModalConfirm, setModalMessage} = useContext(Context);
+	const {budget_id, printNFCe, setPrintNFCe, setModalConfirm, setModalMessage} = useContext(Context);
 
 	const getData = () => {
 		if(sortColumn && sortType){
@@ -65,7 +65,13 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 	};
 
 	const handleButtonPrintClick = (data) => {
-		console.log(data);
+		if(data.external_type == 'D'){
+			setPrintNFCe({
+				opened: true,
+				budget: printNFCe.budget,
+				budget_id: data.budget_id
+			});
+		}
 	};
 
 	const handleButtonDeleteClick = (data) => {

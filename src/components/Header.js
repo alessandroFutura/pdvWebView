@@ -6,6 +6,7 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 
 import { HiOutlineRefresh } from 'react-icons/hi';
+import { BiInfoCircle, BiPrinter } from 'react-icons/bi';
 
 import Context from '../contexts/Context.js';
 
@@ -28,20 +29,8 @@ const Header = () => {
         item => ({label: `${item.company_code} - ${item.company_short_name.toUpperCase()}`, value: item.company_id})
     );
 
-    const handleAbout = () => {
-        // setModalResponse({
-        //     class: 'success',
-        //     title: '000000019',
-        //     message: 'Documento faturado com sucesso!',
-        //     opened: true
-        // });
-        setModalResponse({
-            class: 'error',
-            title: 'Rejeição 502',
-            message: 'Erro na Chave de Acesso - Campo Id não corresponde à concatenação dos campos correspondentes',
-            opened: true
-        });
-        // window.postMessage('about');
+    const handlePostMessage = (msg) => {        
+        window.electronMessage(msg,'appWindow');
     }
 
     const handleButtonRefrehClick = () => {
@@ -55,7 +44,7 @@ const Header = () => {
     return (
         <div className="header">
             <div className="container">
-                <div className="logo" onClick={() => handleAbout()}></div>
+                <div className="logo"></div>
                 <div className="reference">
                     <label>DATA</label>
                     <Stack direction="column" alignItems="flex-start" spacing={6}>
@@ -87,7 +76,7 @@ const Header = () => {
                         placeholder="--" 
                     />
                 </div>
-                <button onClick={(e) => handleButtonRefrehClick()}>
+                <button className="refresh" onClick={(e) => handleButtonRefrehClick()}>
                     <HiOutlineRefresh />
                 </button>
                 <div className="toggles">
@@ -112,6 +101,8 @@ const Header = () => {
                 </div>
                 <div className="date">
                     {moment().locale('pt-br').format('dddd')} - {moment().format('DD/MM/YYYY')} - {time}
+                    <button onClick={() => handlePostMessage('about')}><BiInfoCircle /></button>
+                    <button onClick={() => handlePostMessage('selectPrinter')}><BiPrinter/></button>
                 </div>
             </div>
         </div>

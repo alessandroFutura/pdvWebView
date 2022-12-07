@@ -97,7 +97,7 @@
     font-size: 16px;
 }
 
-.header .container button
+.header .container button.refresh
 {
     z-index: 1;
     width: 48px;
@@ -140,9 +140,18 @@
 .header .container .date
 {
     float: right;
+    width: 446px;
     font-size: 18px;
-    text-align: right;
     color: #419744;
     font-weight: bold;
     text-transform: uppercase;
+}
+
+.header .container .date button
+{
+    float: right;
+    color: #fff;
+    font-size: 26px;
+    border-radius: 50%;
+    background-color: transparent;
 }
