@@ -37,8 +37,8 @@
     .bar,
     .body,
     button,
-    .header,
-    .footer
+    #header,
+    #footer
     {
         display: none !important;
     }

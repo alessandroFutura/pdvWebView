@@ -9,7 +9,7 @@ const Footer = () => {
     const {user, company} = useContext(Context);
 
     return (
-        <div className="footer">
+        <div id="footer">
             <div className="container">
                 <div className="company">
                     <div className="company-image" style={{backgroundImage: `url(${company.image})`}}></div>

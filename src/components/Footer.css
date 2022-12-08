@@ -1,4 +1,4 @@
-.footer
+#footer
 {
     left: 0;
     right: 0;
@@ -7,8 +7,8 @@
     position: absolute;
 }
 
-.footer .user .user-image,
-.footer .company .company-image
+#footer .user .user-image,
+#footer .company .company-image
 {
     width: 64px;
     float: left;
@@ -20,8 +20,8 @@
     background-image: url(../assets/empty.png);
 }
 
-.footer .user .user-name,
-.footer .company .company-name
+#footer .user .user-name,
+#footer .company .company-name
 {
     float: left;
     margin: 18px;
@@ -30,7 +30,7 @@
     font-weight: bold;
 }
 
-.footer .filters
+#footer .filters
 {
     
 }

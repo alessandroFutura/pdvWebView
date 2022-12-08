@@ -48,10 +48,9 @@ const App = () => {
             client_id: '',
             seller_id: '',
             company_id: '',
-            budget_value: '',
+            budget_value: 0,
             document_code: '',
             external_type: '',
-            budget_value: 0,
             budget_value_total: 0,
             budget_value_discount: 0,
             term: {

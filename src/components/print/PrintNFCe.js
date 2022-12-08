@@ -156,7 +156,7 @@ const printNFCe = ({getEmptyBudget}) => {
                         <div className="divider"></div>
                         {!!printNFCe.budget.document.qrCodePath &&
                             <div className="qr-code">
-                                <img src={`${host}qrcode/${printNFCe.budget.company_id}/${printNFCe.budget.document.qrCodePath}`} />
+                                <img alt="Qr Code" src={`${host}qrcode/${printNFCe.budget.company_id}/${printNFCe.budget.document.qrCodePath}`} />
                             </div>
                         }
                         <div className="divider"></div>

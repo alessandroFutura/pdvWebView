@@ -70,7 +70,7 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 	};
 
 	const handleButtonPrintClick = (data) => {
-		if(data.external_type == 'D'){
+		if(data.external_type === 'D'){
 			setPrintNFCe({
 				opened: true,
 				budget: printNFCe.budget,
