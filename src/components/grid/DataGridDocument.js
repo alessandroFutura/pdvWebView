@@ -26,7 +26,12 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
         {width:80, dataKey:'VlDocumento', HeaderCell:'VALOR'}
     ];
 
-	const {budget_id, printNFCe, setPrintNFCe, setModalConfirm, setModalMessage} = useContext(Context);
+	const {
+		budget_id, 
+		printOE, printNFCe, 
+		setPrintOE, setPrintNFCe, 
+		setModalConfirm, setModalMessage
+	} = useContext(Context);
 
 	const getData = () => {
 		if(sortColumn && sortType){
@@ -69,6 +74,12 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 			setPrintNFCe({
 				opened: true,
 				budget: printNFCe.budget,
+				budget_id: data.budget_id
+			});
+		} else {
+			setPrintOE({
+				opened: true,
+				budget: printOE.budget,
 				budget_id: data.budget_id
 			});
 		}

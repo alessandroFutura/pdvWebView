@@ -59,6 +59,8 @@ const ModalAuthorization = () => {
         }}).then((res) => {
             if(res.status === 200){
                 handleModalClose(true);
+                document.getElementById('user-name').value = '';
+                document.getElementById('user-pass').value = '';
             } else {
                 setModalMessage({
                     class: 'warning',

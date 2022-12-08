@@ -8,15 +8,11 @@ const Footer = () => {
 
     const {user, company} = useContext(Context);
 
-    const handleOpenDevTools = () => {
-        window.electronMessage('openDevTools', 'appWindow');
-    }
-
     return (
         <div className="footer">
             <div className="container">
                 <div className="company">
-                    <div className="company-image" style={{backgroundImage: `url(${company.image})`}} onClick={() => handleOpenDevTools()}></div>
+                    <div className="company-image" style={{backgroundImage: `url(${company.image})`}}></div>
                     <div className="company-name">{company.company_code} - {company.company_short_name.toUpperCase()}</div>
                 </div>
                 <div className="user">

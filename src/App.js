@@ -10,6 +10,7 @@ import Budget from './components/Budget.js';
 import Bar from './components/Bar.js';
 import Footer from './components/Footer.js';
 import Loading from "./components/Loading.js";
+import PrintOE from './components/print/PrintOE.js';
 import PrintNFCe from './components/print/PrintNFCe.js';
 import ModalChange from "./components/modal/ModalChange.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
@@ -27,7 +28,17 @@ const App = () => {
         getUser();
         setInterval(function(){
             setTime(moment().format('HH:mm'));
-        },1000)
+        },1000);
+        try{
+            window.require('electron').ipcRenderer.on('printing', (e, data) => {
+                setPrintNFCe({
+                    opened: false,
+                    budget: getEmptyBudget()
+                });
+            });
+        } catch(e){
+
+        }
     },[]);
 
     const getEmptyBudget = () => {
@@ -143,6 +154,12 @@ const App = () => {
         reference: moment().format('YYYY-MM-DD')
     });
 
+    const [printOE, setPrintOE] = useState({
+        budget: getEmptyBudget(),
+        opened: false,
+        budget_id: null
+    });
+
     const [printNFCe, setPrintNFCe] = useState({
         budget: getEmptyBudget(),
         opened: false,
@@ -197,6 +214,9 @@ const App = () => {
         switch(modalAuthorization.action){
             case "documentCancel": 
                 cancelDocument(modalAuthorization.data); 
+            break;
+            case "openDevTools":
+                window.electronMessage('openDevTools', 'appWindow');
             break;
             default: break;
         }
@@ -290,12 +310,17 @@ const App = () => {
             budget_id: budget_id
         }}).then((res) => {
             if(res.status === 200){
-                if(printNFCe.opened){
+                if(printOE.opened){
+                    setPrintOE({
+                        budget: res.data,
+                        opened: true
+                    });
+                } else if(printNFCe.opened){
                     setPrintNFCe({
                         budget: res.data,
                         opened: true
                     });
-                } else {
+                } else{
                     setBudget(res.data);
                 }                
             } else {
@@ -404,6 +429,12 @@ const App = () => {
     }, [budget_id]);
 
     useEffect(() => {
+        if(printOE.opened && !!printOE.budget_id){
+            getBudget(printOE.budget_id);
+        }
+    }, [printOE]);
+
+    useEffect(() => {
         if(printNFCe.opened && !!printNFCe.budget_id){
             getBudget(printNFCe.budget_id);
         }
@@ -435,6 +466,7 @@ const App = () => {
             budgets, setLoading,
             company, setCompany, 
             filters, setFilters,
+            printOE, setPrintOE,
             budget_id, setBudgetId,
             printNFCe, setPrintNFCe,
             modalChange, setModalChange,
@@ -451,6 +483,7 @@ const App = () => {
             </div>
             <Bar/>
             <Footer/>
+            <PrintOE getEmptyBudget={getEmptyBudget}/>
             <PrintNFCe getEmptyBudget={getEmptyBudget}/>
             <ModalChange/>
             <ModalConfirm/>

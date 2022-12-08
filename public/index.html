@@ -15,14 +15,19 @@
     <div id="root"></div>
   </body>
   <script type="text/javascript">
-    function electronMessage(message, data){
-      let success = true;
-      try {
-        require('electron').ipcRenderer.postMessage(message, data || null);
-      } catch (e) {
-        success = false;
-      }
-      return success;
+	function electronMessage(message, data){
+		let success = true;
+		try {
+			require('electron').ipcRenderer.postMessage(message, data || null);
+		} catch (e) {
+			success = false;
+		}
+		return success;
 	}
+	document.addEventListener("DOMContentLoaded", function(e) {
+		// require('electron').ipcRenderer.on('printing', (e, data) => {
+		// 	alert('carraio!!!');
+		// });
+	});
   </script>
 </html>

@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useLayoutEffect, useRef} from "react";
 
 import Context from '../../contexts/Context.js';
 import {host, numberFormat} from '../../contexts/Global.js';
@@ -11,11 +11,17 @@ import "./PrintNFCe.css";
 
 const printNFCe = ({getEmptyBudget}) => { 
 
+    const buttonRef = useRef(null);
+
     const {company, printNFCe, setPrintNFCe} = useContext(Context);
 
     const handleClickPrint = () => {
         if(!window.electronMessage('print', {
-            silent: true
+            silent: true,
+            pageSize: {
+                width: 80 * 1000,
+                height: 297 * 1000
+            }
         })){
             window.print();
         };
@@ -27,6 +33,12 @@ const printNFCe = ({getEmptyBudget}) => {
             budget: getEmptyBudget()
         });
     };
+
+    useLayoutEffect(() => {
+        if(printNFCe.opened && !!printNFCe.budget && !!printNFCe.budget.budget_id){
+            buttonRef.current.focus();
+        }
+    },[printNFCe]);
 
     return (
         <div className={`shadow overflow-y ${printNFCe.opened ? 'opened' : ''}`}>
@@ -161,7 +173,7 @@ const printNFCe = ({getEmptyBudget}) => {
                     </>
                 }
             </div>
-            <button className="button-print" onClick={() => handleClickPrint()}><FaPrint/></button>
+            <button ref={buttonRef} className="button-print" onClick={() => handleClickPrint()}><FaPrint/></button>
             <button className="button-print-close" onClick={() => handleClickClose()}><FaTimes/></button>
         </div>
     );

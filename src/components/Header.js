@@ -6,7 +6,7 @@ import moment from 'moment';
 import 'moment/locale/pt-br';
 
 import { HiOutlineRefresh } from 'react-icons/hi';
-import { BiInfoCircle, BiPrinter } from 'react-icons/bi';
+import { BiInfoCircle, BiPrinter, BiCodeAlt } from 'react-icons/bi';
 
 import Context from '../contexts/Context.js';
 
@@ -22,7 +22,7 @@ const Header = () => {
         user, 
         company, setCompany, 
         filters, setFilters,
-        setModalResponse
+        setModalAuthorization
     } = useContext(Context);
 
     const data = user.companies.map(
@@ -41,8 +41,21 @@ const Header = () => {
         });
     };
 
+    const handleButtonOpenDevToolsClick = () => {
+        setModalAuthorization({
+            action: 'openDevTools',
+            title: 'Autorização',
+            message: 'Para acessar a ferramenta será necessário a autorização',
+            opened: true,
+            authorized: false,
+            buttonDenyText: 'Cancelar',
+            buttonConfirmText: 'Autorizar',
+            data: {}
+        });
+    }
+
     return (
-        <div className="header">
+        <div className="header" id="header">
             <div className="container">
                 <div className="logo"></div>
                 <div className="reference">
@@ -103,6 +116,7 @@ const Header = () => {
                     {moment().locale('pt-br').format('dddd')} - {moment().format('DD/MM/YYYY')} - {time}
                     <button onClick={() => handlePostMessage('about')}><BiInfoCircle /></button>
                     <button onClick={() => handlePostMessage('selectPrinter')}><BiPrinter/></button>
+                    <button onClick={() => handleButtonOpenDevToolsClick()}><BiCodeAlt/></button>
                 </div>
             </div>
         </div>

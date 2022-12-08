@@ -1,0 +1,326 @@
+.print-oe
+{
+    width: 780px;
+    margin: 10px auto;
+    font-family: Roboto;
+    text-transform: uppercase;
+}
+
+.print-oe table
+{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.print-oe th
+{
+    padding: 5px;
+    text-transform: uppercase;
+    -webkit-print-color-adjust: exact;
+    background-color: #a7a7a7 !important;
+}
+
+.print-oe th, .print-oe td
+{
+    font-size: 10px;
+    overflow: hidden;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.print-oe hr
+{
+    border-color: #333;
+    border-style: dashed;
+}
+
+.print-oe .border{ border: 1px solid #333; }
+.print-oe .border-top{ border-top: 1px solid #333; }
+.print-oe .border-left{ border-left: 1px solid #333; }
+.print-oe .border-right{ border-right: 1px solid #333; }
+.print-oe .border-bottom{ border-bottom: 1px solid #333; }
+
+.print-oe .data-print
+{
+    width: 780px;
+    height: 1103px;
+    margin: 20px auto;
+    position: relative;
+    background-color: #fff;
+    padding: 20px 20px 60px;
+}
+
+.print-oe .data-print .signature
+{
+    margin-bottom: 10px;
+}
+
+.print-oe .data-print .signature tr td:nth-child(2)
+{
+    padding: 4px;
+}
+
+.print-oe .data-print .signature tr td:nth-child(2) span
+{
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.print-oe .data-print .signature table td
+{
+    padding: 4px;
+}
+
+.print-oe .data-print .header b
+{
+    font-size: 14px;
+}
+
+.print-oe .data-print .header tr:nth-child(1) td:last-child
+{
+    text-align: right;
+}
+
+.print-oe .data-print .header .logo
+{
+    width: 60px;
+}
+
+.print-oe .data-print .header .logo img
+{
+    max-width: 200px;
+    max-height: 60px;
+}
+
+.print-oe .data-print .header .company
+{
+    padding: 0 20px;
+}
+
+.print-oe .data-print .header .company b
+{
+    font-size: 14px;
+}
+
+.print-oe .data-print .header
+{
+    margin-bottom: 15px;
+}
+
+.print-oe .data-print .header .document
+{
+    text-align: right;
+}
+
+.print-oe .data-print .header .document .box
+{
+    width: 130px;
+    padding: 4px;
+    margin: 0 0 5px auto;
+}
+
+.print-oe .data-print .header .box span
+{
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.print-oe .data-print hr
+{
+    margin: 12px 0 20px;
+}
+
+.print-oe .data-print .operation
+{
+    margin-bottom: 15px;
+}
+
+.print-oe .data-print .operation td
+{
+    padding: 4px;
+    line-height: 12px;
+}
+
+.print-oe .data-print .operation td span
+{
+    display: block;
+}
+
+.print-oe .data-print .person
+{
+    margin-bottom: 15px;
+}
+
+.print-oe .data-print .person td
+{
+    padding: 4px;
+    line-height: 12px;
+}
+
+.print-oe .data-print .person td span
+{
+    display: block;
+}
+
+.print-oe .data-print .items
+{
+    border-left: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.print-oe .data-print .items td,
+.print-oe .data-print .items th
+{
+    padding: 4px;
+    text-align: center;
+    border-top: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+.print-oe.counting .data-print .items tr td:nth-child(6)
+{
+    text-indent: -9999px;
+}
+
+.print-oe.counting .data-print .items tr th:nth-child(7),
+.print-oe.counting .data-print .items tr td:nth-child(7)
+{
+    display: none;
+}
+
+.print-oe .data-print .data-payments
+{
+    left: 20px;
+    right: 20px;
+    bottom: 160px;
+    position: absolute;
+}
+
+.print-oe .data-print .data-payments table
+{
+    border-left: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.print-oe .data-print .data-payments table td,
+.print-oe .data-print .data-payments table th
+{
+    padding: 4px;
+    text-align: center;
+    border-top: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+.print-oe .data-print .note
+{
+    left: 20px;
+    right: 20px;
+    bottom: 52px;
+    position: absolute;
+}
+
+.print-oe .data-print .note table
+{
+    margin-bottom: 2px;
+}
+
+.print-oe .data-print .note table td
+{
+    padding: 4px;
+    line-height: 12px;
+}
+
+.print-oe .data-print .note table td span
+{
+    display: block;
+}
+
+.print-oe .data-print .note .text
+{
+    height: 60px;
+    padding: 5px;
+}
+
+.print-oe .data-print .footer
+{
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    font-size: 10px;
+    padding: 4px 10px;
+    position: absolute;
+    -webkit-print-color-adjust: exact;
+    background-color: #a7a7a7 !important;
+}
+
+.print-oe .data-print .footer span:nth-child(2)
+{
+    float: right;
+    font-weight: bold;
+}
+
+#button-print
+{
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    position: fixed;
+    font-size: 24px;
+    border-radius: 50% !important;
+}
+
+#button-print
+{
+    bottom: 20px;
+}
+
+@media print
+{
+    html, body
+    {
+        height: auto;
+    }
+
+    .print,
+    .container
+    {
+        padding: 0 !important;
+    }
+
+    button.btn
+    {
+        display: none;
+    }
+
+    .print-oe
+    {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .print-oe .data-print
+    {
+        margin: 0;
+        width: 100%;
+        height: 1086px;
+        page-break-after: always;
+    }
+
+    .print-oe .data-print hr
+    {
+        margin: 12px 0;
+    }
+
+    .print-oe .data-print .footer
+    {
+        width: 718px;
+        bottom: 10px;
+    }
+}
+
+@page
+{
+    margin: 5mm;
+}
