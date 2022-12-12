@@ -23,7 +23,7 @@ const ModalPayment = () => {
 
     const handleSubmitClick = () => {
         setModalConfirm({
-            id: 'budget-submit',
+            id: 'budgetSubmit',
             message: 'Deseja realmente faturar o documento?',
             opened: true,
             confirmed: false,

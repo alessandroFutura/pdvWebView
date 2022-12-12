@@ -1,7 +1,7 @@
 import React, {useContext}  from "react";
 
-import { IoClose } from 'react-icons/io5';
-import { BsQuestionCircle, BsCheck2 } from 'react-icons/bs';
+
+import { BsQuestionCircle } from 'react-icons/bs';
 
 import Context from '../../contexts/Context.js';
 
@@ -11,11 +11,12 @@ const ModalResponse = () => {
     
     const {modalConfirm, setModalConfirm} = useContext(Context);
     
-    const handleModalClose = (confirmed) => {
+    const handleModalClose = (canceled, confirmed) => {
         setModalConfirm({
             id: modalConfirm.id,
             message: modalConfirm.message,
             opened: false,
+            canceled: canceled,
             confirmed: confirmed,
             buttonDenyText: modalConfirm.buttonDenyText,
             buttonConfirmText: modalConfirm.buttonConfirmText,
@@ -30,14 +31,14 @@ const ModalResponse = () => {
                     <BsQuestionCircle/>
                 </div>
                 <div className="body">
-                    <p>{modalConfirm.message}</p>
+                    <p dangerouslySetInnerHTML={{__html: modalConfirm.message}}></p>
                 </div>
                 <div className="footer">
-                    <button onClick={() => handleModalClose(false)}>
-                        <IoClose/> {modalConfirm.buttonDenyText}
+                    <button onClick={() => handleModalClose(true, false)}>
+                        {modalConfirm.buttonDenyText}
                     </button>
-                    <button onClick={() => handleModalClose(true)}>
-                        <BsCheck2/> {modalConfirm.buttonConfirmText}
+                    <button onClick={() => handleModalClose(false, true)}>
+                        {modalConfirm.buttonConfirmText}
                     </button>
                 </div>
             </div>

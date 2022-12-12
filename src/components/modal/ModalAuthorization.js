@@ -1,4 +1,4 @@
-import React, {useContext}  from "react";
+import React, {useContext, useEffect}  from "react";
 
 import { Form } from 'rsuite';
 
@@ -14,12 +14,21 @@ import "./ModalAuthorization.css";
 const ModalAuthorization = () => { 
     
     const {user, setLoading, modalAuthorization, setModalMessage, setModalAuthorization} = useContext(Context);
+
+    useEffect(() => {
+        if(modalAuthorization.opened){
+            setTimeout(() => {
+                document.getElementById('user-name').select();
+            },300);
+        }
+    }, [modalAuthorization]);
     
-    const handleModalClose = (authorized) => {
+    const handleModalClose = (canceled, authorized) => {
         setModalAuthorization({
             action: modalAuthorization.action,
             message: modalAuthorization.message,
             opened: false,
+            canceled: canceled,
             authorized: authorized,
             buttonDenyText: modalAuthorization.buttonDenyText,
             buttonConfirmText: modalAuthorization.buttonConfirmText,
@@ -58,7 +67,7 @@ const ModalAuthorization = () => {
             data: modalAuthorization.data
         }}).then((res) => {
             if(res.status === 200){
-                handleModalClose(true);
+                handleModalClose(false, true);
                 document.getElementById('user-name').value = '';
                 document.getElementById('user-pass').value = '';
             } else {
@@ -66,7 +75,6 @@ const ModalAuthorization = () => {
                     class: 'warning',
                     title: res.response.data.title || 'Atenção',
                     message: res.response.data.message,
-                    zIndex: 11,
                     opened: true
                 });
             }
@@ -94,10 +102,10 @@ const ModalAuthorization = () => {
                     </Form>
                 </div>
                 <div className="footer">
-                    <button onClick={() => handleModalClose(false)}>
+                    <button onClick={() => handleModalClose(true, false)}>
                         <IoClose/> {modalAuthorization.buttonDenyText}
                     </button>
-                    <button onClick={() => handleFormSubmit(true)}>
+                    <button onClick={() => handleFormSubmit()}>
                         <BsCheck2/> {modalAuthorization.buttonConfirmText}
                     </button>
                 </div>

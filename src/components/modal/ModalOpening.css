@@ -1,0 +1,51 @@
+.shadow .modal.modal-opening
+{
+    width: 420px;
+    height: 280px;
+}
+
+.shadow .modal.modal-opening .header
+{
+    height: 100px;
+    font-size: 60px;
+    text-align: center;
+    background-color: #4caf50;
+}
+
+.shadow .modal.modal-opening .body
+{
+    bottom: 0;
+    top: 100px;
+    padding: 40px;
+    text-align: center;
+}
+
+.shadow .modal.modal-opening .body label
+{
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.shadow .modal.modal-opening .body .rs-form-group input
+{
+    font-size: 32px;
+    text-align: center;
+}
+
+.shadow .modal.modal-opening .body .rs-form-group .rs-input-number-btn-group-vertical
+{
+    display: none;
+}
+
+.shadow .modal.modal-opening .body .rs-form-group
+{
+    width: 180px;
+    margin: auto;
+}
+
+.shadow .modal.modal-opening .body .rs-form-vertical .rs-form-group .rs-input-group
+{
+    width: 180px;
+}

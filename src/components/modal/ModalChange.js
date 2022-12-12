@@ -76,7 +76,6 @@ const ModalChange = () => {
                         </Form.Group>
                         <Form.Group controlId="paid-value">
                             <Form.ControlLabel>Valor Recebido</Form.ControlLabel>
-                            {/* <Form.Control onChange={(value, event) => handleChange(value, event)} name="paid-value" value={paidValue} style={{width: 120}}/> */}
                             <InputNumber onKeyUp={(e) => handleKeyUp(e)} value={paidValue} onChange={(value) => handleChange(value)} step={0.01} />
                         </Form.Group>
                         <Form.Group controlId="change-value">

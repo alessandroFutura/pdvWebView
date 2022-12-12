@@ -15,6 +15,7 @@ import PrintNFCe from './components/print/PrintNFCe.js';
 import ModalChange from "./components/modal/ModalChange.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
+import ModalOpening from "./components/modal/ModalOpening.js";
 import ModalPayment from "./components/modal/ModalPayment.js";
 import ModalAuthorization from "./components/modal/ModalAuthorization.js";
 
@@ -25,20 +26,9 @@ import './components/print/Print.css';
 const App = () => {    
     
     useEffect(() => {
-        getUser();
-        setInterval(function(){
-            setTime(moment().format('HH:mm'));
-        },1000);
-        try{
-            window.require('electron').ipcRenderer.on('printing', (e, data) => {
-                setPrintNFCe({
-                    opened: false,
-                    budget: getEmptyBudget()
-                });
-            });
-        } catch(e){
-
-        }
+        getData();
+        printing();
+        setInterval(() => setTime(moment().format('HH:mm')), 1000);
     },[]);
 
     const getEmptyBudget = () => {
@@ -122,7 +112,7 @@ const App = () => {
                 IdContaBancariaCaixa: 'null'
             }
         };
-    }
+    };
 
     const getEmptyUser = () => {
         return {
@@ -135,7 +125,23 @@ const App = () => {
             terminal: {},
             companies: []
         };
-    }
+    };
+
+    const getEmptyTerminal = () => {
+        return {
+            terminal_id: null,
+            user_id: null,
+            terminal_active: null,
+            terminal_nfe: null,
+            terminal_nfce: null,
+            terminal_oe: null,
+            terminal_name: null,
+            terminal_token: null,
+            terminal_nickname: null,
+            terminal_date: null,
+            operation: null
+        }
+    };
 
     const [loading, setLoading] = useState(0);
     const [budgets, setBudgets] = useState([]);
@@ -146,6 +152,7 @@ const App = () => {
     const [user, setUser] = useState(getEmptyUser());
     const [budget, setBudget] = useState(getEmptyBudget());
     const [company, setCompany] = useState(getEmptyCompany());        
+    const [terminal, setTerminal] = useState(getEmptyTerminal());
 
     const [filters, setFilters] = useState({
         states: ['A'],
@@ -170,6 +177,8 @@ const App = () => {
         action: '',
         message: '',
         opened: false,
+        canceled: false,
+        authorized: false,
         buttonDenyText: '',
         buttonConfirmText: '',
         data: null
@@ -186,6 +195,7 @@ const App = () => {
         title: '',
         message: '',
         opened: false,
+        canceled: false,
         confirmed: false,
         buttonDenyText: '',
         buttonConfirmText: '',
@@ -196,6 +206,13 @@ const App = () => {
         title: '',
         message: '',
         opened: false
+    });
+
+    const [modalOpening, setModalOpening] = useState({
+        opened: false,
+        submit: false,
+        terminal_operation_type: null,
+        terminal_operation_value: 0
     });
 
     const [modalResponse, setModalResponse] = useState({
@@ -209,13 +226,70 @@ const App = () => {
         opened: false
     });
 
+    const afterGetTerminal = () => {
+        if(!terminal.operation || terminal.operation.terminal_operation_type === 'E'){
+            // CAIXA FECHADO
+            // ABERTURA DE CAIXA
+            openTerminal();
+        } else if(terminal.operation.terminal_operation_type === 'A'){
+            // CAIXA ABERTO
+            if(terminal.operation.user_id !== user.user_id){
+                // ABERTURA DE CAIXA COM USUÁRIO DIFERENTE
+                // ABRIR TELA PARA AUTORIZAR A ABERTURA
+                // ENCERRAR A ABERTURA ANTERIOR
+                setModalConfirm({
+                    id: 'closeTerminalAuthorization',
+                    message: (`
+                        Ops!<br/>    
+                        O caixa encontra-se aberto com o usuário ${terminal.operation.user_name}.<br/>
+                        Será necessário encerrar o caixa. O que deja fazer?
+                    `),
+                    opened: true,
+                    confirmed: false,
+                    buttonDenyText: 'Deslogar do Sistema',
+                    buttonConfirmText: 'Encerrar o Caixa'
+                });
+            } else if(moment(terminal.operation.terminal_operation_date).format('YYYY-MM-DD') !== moment().format('YYYY-MM-DD')){
+                // CAIXA NÃO FOI ENCERRADO DA ULTIMA VEZ
+                // TELA DE ENCERRAMENTO DO CAIXA
+                setModalConfirm({
+                    id: 'closeTerminal',
+                    message: (`
+                        Ops!<br/>    
+                        O caixa não foi encerrado anteriormente.<br/>
+                        Será necessário encerrar o caixa. O que deja fazer?
+                    `),
+                    opened: true,
+                    confirmed: false,
+                    buttonDenyText: 'Deslogar do Sistema',
+                    buttonConfirmText: 'Encerrar o Caixa'
+                });
+            }
+        }
+    };
+
     const afterModalAuthorized = () => {
         switch(modalAuthorization.action){
             case "documentCancel": 
-                cancelDocument(modalAuthorization.data); 
+                if(modalAuthorization.authorized){
+                    cancelDocument(modalAuthorization.data); 
+                }
             break;
             case "openDevTools":
-                window.electronMessage('openDevTools', 'appWindow');
+                if(modalAuthorization.authorized){
+                    window.electronMessage('openDevTools', 'appWindow');
+                }
+            break;
+            case "closeTerminalAuthorization":
+                console.log('closeTerminalAuthorization')
+                if(modalAuthorization.authorized){
+                    closeTerminal({
+                        openAfter: true
+                    });
+                } else {
+                    console.log('@@@');
+                    afterGetTerminal();
+                }
             break;
             default: break;
         }
@@ -223,35 +297,83 @@ const App = () => {
 
     const afterModalConfirm = () => {
         switch(modalConfirm.id){
-            case 'budget-submit': 
-                let moneyValue = getMoneyValue();
-                if(moneyValue > 0){
-                    setModalChange({
-                        opened: true,
-                        paidValue: 0,
-                        changeValue: 0,
-                        chargedValue: moneyValue
-                    });
-                } else {
-                    submitBudget();
+            case 'budgetSubmit': 
+                if(modalConfirm.confirmed){
+                    let moneyValue = getMoneyValue();
+                    if(moneyValue > 0){
+                        setModalChange({
+                            opened: true,
+                            paidValue: 0,
+                            changeValue: 0,
+                            chargedValue: moneyValue
+                        });
+                    } else {
+                        submitBudget();
+                    }
                 }
             break;
-            case 'budget-cancel': 
-                initBudget(); 
+            case 'budgetCancel': 
+                if(modalConfirm.confirmed){
+                    initBudget(); 
+                }
             break;
-            case 'document-cancel': 
-                setModalAuthorization({
-                    action: 'documentCancel',
-                    title: 'Autorização',
-                    message: 'Para cancelar o documento será necessário a autorização',
-                    opened: true,
-                    authorized: false,
-                    buttonDenyText: 'Cancelar',
-                    buttonConfirmText: 'Autorizar',
-                    data: modalConfirm.data
-                });
+            case 'documentCancel': 
+                if(modalConfirm.confirmed){    
+                    setModalAuthorization({
+                        action: 'documentCancel',
+                        title: 'Autorização',
+                        message: 'Para cancelar o documento será necessário a autorização.',
+                        opened: true,
+                        authorized: false,
+                        buttonDenyText: 'Cancelar',
+                        buttonConfirmText: 'Autorizar',
+                        data: modalConfirm.data
+                    });
+                }
+            break;
+            case 'closeTerminal':
+                if(modalConfirm.confirmed){
+                    closeTerminal({
+                        logoutAfter: true
+                    });
+                } else {
+                    logout();
+                }
+            break;            
+            case 'closeTerminalAuthorization':
+                if(modalConfirm.confirmed){
+                    setModalAuthorization({
+                        action: 'closeTerminalAuthorization',
+                        title: 'Autorização',
+                        message: 'Para encerrar o caixa aberto por outro usuário será necessário a autorização.',
+                        opened: true,
+                        authorized: false,
+                        buttonDenyText: 'Cancelar',
+                        buttonConfirmText: 'Autorizar',
+                        data: {}
+                    });
+                } else {
+                    logout();
+                }
+            break;
+            case 'close':
+                if(modalConfirm.confirmed){
+                    closeTerminal({
+                        logoutAfter: true
+                    });
+                }
             break;
             default: break;
+        }
+    };
+
+    const afterModalMessage = () => {
+        switch(modalMessage.afterClose){
+            case 'terminalOperation':
+                afterGetTerminal();
+            break;
+            default:
+            break;
         }
     }
 
@@ -262,7 +384,7 @@ const App = () => {
             message: !!data && !!data.message ? data.message :'Resposta inesperada do servidor.',
             opened: true
         });
-    }
+    };
 
     const cancelDocument = (data) => {
         initBudget();
@@ -286,20 +408,31 @@ const App = () => {
             }
             setLoading(loading => loading-1);
         });
-    }
+    };
+
+    const closeTerminal = (params) => {
+        terminalOperation({
+            terminal_id: terminal.terminal_id,
+            terminal_operation_type: 'E',
+            terminal_operation_value: 0,
+            openAfter: params.openAfter || false,
+            logoutAfter: params.logoutAfter || false
+        });
+    };
     
-    const getUser = () => {
+    const getData = () => {
         setLoading(loading => loading+1);
-        Api.post({script: 'user', action: 'get'}).then((res) => {
+        Api.post({script: 'data', action: 'get'}).then((res) => {
             if(res.status === 200){
-                setUser(res.data);
-                setCompany(res.data.companies.filter((company) => {
+                setUser(res.data.login);
+                setTerminal(res.data.terminal);
+                setCompany(res.data.login.companies.filter((company) => {
                     return company.user_company_main === 'Y'
-                })[0]);
+                })[0]);                
             } else {
                 apiErrorMessage();
             }
-            setLoading(loading => loading-1);   
+            setLoading(loading => loading-1);
         });
     };
 
@@ -352,7 +485,7 @@ const App = () => {
             return payment.modality_id === '00A0000001'
         });
         return payment.length > 0 ? payment[0].budget_payment_value : 0
-    }    
+    };   
 
     const initBudget = () => {
         setBudget(getEmptyBudget());
@@ -361,7 +494,62 @@ const App = () => {
             opened: false,
             budget: getEmptyBudget()
         });
-    }    
+    };
+
+    const logout = () => {
+        window.electronMessage('afterLogout');
+    };
+
+    const openTerminal = () => {
+        setModalOpening({
+            opened: true,
+            submit: false,
+            terminal_operation_type: null,
+            terminal_operation_value: 0
+        });
+    }
+
+    const terminalOperation = (data) => {
+        setLoading(loading => loading+1);
+        Api.post({script: 'terminal', action: 'operation', data: data}).then((res) => {
+            if(res.status === 200){
+                setModalOpening({
+                    opened: false,
+                    submit: false,
+                    terminal_operation_type: null,
+                    terminal_operation_value: 0
+                });
+                if(data.openAfter){
+                    openTerminal();
+                }
+                if(data.logoutAfter){
+                    logout();
+                }
+            } else {
+                setModalMessage({
+                    class: 'warning',
+                    title: 'Atenção!',
+                    message: 'Resposta inesperada do servidor.',
+                    opened: true,
+                    afterClose: 'terminalOperation'
+                });
+            }
+            setLoading(loading => loading-1);
+        });
+    };
+    
+    const printing = () => {
+        try{
+            window.require('electron').ipcRenderer.on('printing', (e, data) => {
+                setPrintNFCe({
+                    opened: false,
+                    budget: getEmptyBudget()
+                });
+            });
+        } catch(e){
+
+        }
+    };
 
     const showLoading = () => {
         setLoadingStyle({
@@ -398,7 +586,7 @@ const App = () => {
             }
             setLoading(loading => loading-1);
         });
-    }
+    };
 
     useEffect(() => {
         showLoading();
@@ -413,6 +601,12 @@ const App = () => {
             });
         }
     }, [company]);
+
+    useEffect(() => {
+        if(!!terminal.terminal_id){
+            afterGetTerminal();
+        }
+    }, [terminal]);
 
     useEffect(() => {
         if(!!filters.company_id){
@@ -446,13 +640,34 @@ const App = () => {
     }, [modalChange]);
 
     useEffect(() => {
-        if(modalConfirm.confirmed){
+        if(modalConfirm.confirmed || modalConfirm.canceled){
             afterModalConfirm();
         }
     }, [modalConfirm]);
 
     useEffect(() => {
-        if(modalAuthorization.authorized){
+        if(!!modalMessage.afterClose){
+            afterModalMessage();
+        }
+    }, [modalMessage]);
+
+    useEffect(() => {
+        if(
+            modalOpening.opened && 
+            modalOpening.submit && 
+            !!modalOpening.terminal_operation_type &&
+            modalOpening.terminal_operation_value > 0
+        ){
+            terminalOperation({
+                terminal_id: terminal.terminal_id,
+                terminal_operation_type: modalOpening.terminal_operation_type,
+                terminal_operation_value: modalOpening.terminal_operation_value
+            });
+        }
+    }, [modalOpening]);
+
+    useEffect(() => {
+        if(modalAuthorization.authorized || modalAuthorization.canceled){
             afterModalAuthorized();
         }
     }, [modalAuthorization]);
@@ -471,6 +686,7 @@ const App = () => {
             modalChange, setModalChange,
             modalConfirm, setModalConfirm,
             modalMessage, setModalMessage,
+            modalOpening, setModalOpening,
             modalPayment, setModalPayment,
             modalResponse, setModalResponse,
             modalAuthorization, setModalAuthorization
@@ -487,6 +703,7 @@ const App = () => {
             <ModalChange/>
             <ModalConfirm/>
             <ModalMessage/>
+            <ModalOpening/>
             <ModalPayment/>
             <ModalAuthorization/>
             <Loading loadingStyle={loadingStyle}/>

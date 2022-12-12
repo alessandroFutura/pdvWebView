@@ -16,12 +16,13 @@ const ModalMessage = () => {
             class: '',
             title: '',
             message: '',
-            opened: false
+            opened: false,
+            afterClose: modalMessage.afterClose || null
         });
     }
 
     return (
-        <div style={{zIndex: modalMessage.zIndex || 10}} className={`shadow ${modalMessage.opened ? 'opened' : ''}`}>
+        <div style={{zIndex: 11}} className={`shadow ${modalMessage.opened ? 'opened' : ''}`}>
             <div className={`modal modal-message box-shadow ${modalMessage.class}`}>
                 <div className="header">
                     <FiInfo/>

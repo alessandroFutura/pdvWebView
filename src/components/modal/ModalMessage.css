@@ -53,8 +53,9 @@
 }
 
 .shadow .modal.modal-message.info .header svg:nth-child(1),
-.shadow .modal.modal-message.danger .header svg:nth-child(2),
-.shadow .modal.modal-message.warning .header svg:nth-child(2)
+.shadow .modal.modal-message.success .header svg:nth-child(2),
+.shadow .modal.modal-message.danger .header svg:nth-child(3),
+.shadow .modal.modal-message.warning .header svg:nth-child(3)
 {
     display: inline-block;
 }

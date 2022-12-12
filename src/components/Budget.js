@@ -27,7 +27,7 @@ const Budget = () => {
     const handleButtonCancelClick = () => {
         if(!budget.document || budget.document.CdStatus < 9){
             setModalConfirm({
-                id: 'budget-cancel',
+                id: 'budgetCancel',
                 message: 'Deseja realmente cancelar o faturamento?',
                 opened: true,
                 confirmed: false,
@@ -36,7 +36,7 @@ const Budget = () => {
             });
         } else {
             setModalConfirm({
-                id: 'budget-cancel',
+                id: 'budgetCancel',
                 confirmed: true
             });
         }

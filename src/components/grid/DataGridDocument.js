@@ -91,7 +91,7 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 
 	const handleButtonCancelClick = (data) => {
 		setModalConfirm({
-            id: 'document-cancel',
+            id: 'documentCancel',
             message: 'Deseja realmente cancelar o documento?',
             opened: true,
             confirmed: false,

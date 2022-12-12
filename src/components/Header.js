@@ -5,6 +5,7 @@ import { Toggle } from 'rsuite';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import { MdLogout } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { BiInfoCircle, BiPrinter, BiCodeAlt } from 'react-icons/bi';
 
@@ -22,16 +23,27 @@ const Header = () => {
         user, 
         company, setCompany, 
         filters, setFilters,
-        setModalAuthorization
+        setModalConfirm, setModalAuthorization
     } = useContext(Context);
 
     const data = user.companies.map(
         item => ({label: `${item.company_code} - ${item.company_short_name.toUpperCase()}`, value: item.company_id})
     );
 
+    const handleButtonLogoutClick = () => {
+        setModalConfirm({
+            id: 'close',
+            message: 'Deseja realmente encerrar o caixa?',
+            opened: true,
+            confirmed: false,
+            buttonDenyText: 'Não',
+            buttonConfirmText: 'Sim'
+        });
+    };
+
     const handlePostMessage = (msg) => {        
         window.electronMessage(msg,'appWindow');
-    }
+    };
 
     const handleButtonRefrehClick = () => {
         setFilters({
@@ -114,6 +126,7 @@ const Header = () => {
                 </div>
                 <div className="date">
                     {moment().locale('pt-br').format('dddd')} - {moment().format('DD/MM/YYYY')} - {time}
+                    <button onClick={() => handleButtonLogoutClick()}><MdLogout/></button>
                     <button onClick={() => handlePostMessage('about')}><BiInfoCircle /></button>
                     <button onClick={() => handlePostMessage('selectPrinter')}><BiPrinter/></button>
                     <button onClick={() => handleButtonOpenDevToolsClick()}><BiCodeAlt/></button>
