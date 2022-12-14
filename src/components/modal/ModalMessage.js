@@ -19,7 +19,7 @@ const ModalMessage = () => {
             opened: false,
             afterClose: modalMessage.afterClose || null
         });
-    }
+    };
 
     return (
         <div style={{zIndex: 11}} className={`shadow ${modalMessage.opened ? 'opened' : ''}`}>

@@ -18,11 +18,7 @@ const Budget = () => {
         });
         
         return payments.length === 1 ? payments[0] : 'MULTIPLAS';
-    }
-    
-    const handleButtonDeleteClick = () => {
-        console.log('delete');
-    }
+    };
 
     const handleButtonCancelClick = () => {
         if(!budget.document || budget.document.CdStatus < 9){
@@ -40,33 +36,26 @@ const Budget = () => {
                 confirmed: true
             });
         }
-    }
+    };
 
     const handleButtonSubmitClick = () => {
         setModalPayment({
             opened: true
         });        
-    }
-
-    const deleteButtonDisabled = () => {
-        return (
-            !budget.budget_id || 
-            !!budget.document
-        );
-    }
+    };
 
     const cancelButtonDisabled = () => {
         return (
             !budget.budget_id
         );
-    }
+    };
 
     const submitButtonDisabled = () => {
         return (
             !budget.budget_id || 
             (!!budget.document && budget.document.CdStatus >= 9)
         );
-    }
+    };
 
     return (
         <div className="budget">
@@ -98,8 +87,7 @@ const Budget = () => {
                 </div>                
             </div>
             <div className="controle">
-                <button disabled={deleteButtonDisabled()} onClick={() => handleButtonDeleteClick()} className="btn btn-red">Excluir</button>
-                <button disabled={cancelButtonDisabled()} onClick={() => handleButtonCancelClick()} className="btn btn-purple">Cancelar</button>
+                <button disabled={cancelButtonDisabled()} onClick={() => handleButtonCancelClick()} className="btn btn-red">Cancelar</button>
                 <button disabled={submitButtonDisabled()} onClick={() => handleButtonSubmitClick()} className="btn btn-green">Faturar</button>
             </div>
         </div>

@@ -44,6 +44,7 @@
 {
     width: 780px;
     height: 1103px;
+    overflow: hidden;
     margin: 20px auto;
     position: relative;
     background-color: #fff;
@@ -261,6 +262,27 @@
 {
     float: right;
     font-weight: bold;
+}
+
+.print-oe .data-print .walter-mark
+{
+    top: -100px;
+    right: -200px;
+    bottom: -100px;
+    opacity: .1;
+    left: -200px;
+    font-size: 86px;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    transform: rotate(-45deg);
+}
+
+.print-oe .data-print .walter-mark span
+{
+    margin: 0 10px;
+    display: block;
 }
 
 #button-print

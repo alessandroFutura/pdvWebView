@@ -28,8 +28,6 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 
 	const {
 		budget_id, 
-		printOE, printNFCe, 
-		setPrintOE, setPrintNFCe, 
 		setModalConfirm, setModalMessage
 	} = useContext(Context);
 
@@ -70,19 +68,18 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 	};
 
 	const handleButtonPrintClick = (data) => {
-		if(data.external_type === 'D'){
-			setPrintNFCe({
-				opened: true,
-				budget: printNFCe.budget,
-				budget_id: data.budget_id
-			});
-		} else {
-			setPrintOE({
-				opened: true,
-				budget: printOE.budget,
-				budget_id: data.budget_id
-			});
-		}
+		setModalConfirm({
+            id: 'documentPrint',
+            message: (`
+				Para reimprimir o documento será necessário autorização especial.
+				O que deseja fazer?
+			`),
+            opened: true,
+            confirmed: false,
+            buttonDenyText: 'Cancelar',
+            buttonConfirmText: 'Solicitar Permissão',
+			data: data
+        });		
 	};
 
 	const handleButtonDeleteClick = (data) => {

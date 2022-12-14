@@ -19,7 +19,7 @@ const Items = ({items}) => {
             <tbody>
                 {items.map((item, key) => (
                     <tr key={key}>
-                        <td>{key+1}</td>
+                        <td>{item.key}</td>
                         <td>{item.product.CdChamada}</td>
                         <td>{item.product.NmProduto}</td>
                         <td>{item.product.CdSigla}</td>

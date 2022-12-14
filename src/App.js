@@ -17,6 +17,7 @@ import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
 import ModalOpening from "./components/modal/ModalOpening.js";
 import ModalPayment from "./components/modal/ModalPayment.js";
+import ModalSuccess from "./components/modal/ModalSuccess.js";
 import ModalAuthorization from "./components/modal/ModalAuthorization.js";
 
 import './App.css';
@@ -163,12 +164,14 @@ const App = () => {
     const [printOE, setPrintOE] = useState({
         budget: getEmptyBudget(),
         opened: false,
+        reprint: false,
         budget_id: null
     });
 
     const [printNFCe, setPrintNFCe] = useState({
         budget: getEmptyBudget(),
         opened: false,
+        reprint: false,
         budget_id: null
     });
     
@@ -215,11 +218,15 @@ const App = () => {
         terminal_operation_value: 0
     });
 
-    const [modalResponse, setModalResponse] = useState({
-        class: '',
-        title: '',
-        message: '',
-        opened: false
+    const [modalSuccess, setModalSuccess] = useState({
+        opened: false,
+        data: {
+            DsModelo: '',
+            IdDocumento: '',
+            IdLoteEstoque: '',
+            NrDocumento: '',
+            budget_id: ''
+        }
     });
 
     const [modalPayment, setModalPayment] = useState({
@@ -272,7 +279,26 @@ const App = () => {
         switch(modalAuthorization.action){
             case "documentCancel": 
                 if(modalAuthorization.authorized){
-                    cancelDocument(modalAuthorization.data); 
+                    cancelDocument(modalAuthorization.data);
+                }
+            break;
+            case "documentPrint": 
+                if(modalAuthorization.authorized){
+                    if(modalAuthorization.data.modelo === '65'){
+                        setPrintNFCe({
+                            opened: true,
+                            reprint: true,
+                            budget: printNFCe.budget,
+                            budget_id: modalAuthorization.data.budget_id
+                        });
+                    } else {
+                        setPrintOE({
+                            opened: true,
+                            reprint: true,
+                            budget: printOE.budget,
+                            budget_id: modalAuthorization.data.budget_id
+                        });
+                    }
                 }
             break;
             case "openDevTools":
@@ -281,13 +307,11 @@ const App = () => {
                 }
             break;
             case "closeTerminalAuthorization":
-                console.log('closeTerminalAuthorization')
                 if(modalAuthorization.authorized){
                     closeTerminal({
                         openAfter: true
                     });
                 } else {
-                    console.log('@@@');
                     afterGetTerminal();
                 }
             break;
@@ -323,6 +347,20 @@ const App = () => {
                         action: 'documentCancel',
                         title: 'Autorização',
                         message: 'Para cancelar o documento será necessário a autorização.',
+                        opened: true,
+                        authorized: false,
+                        buttonDenyText: 'Cancelar',
+                        buttonConfirmText: 'Autorizar',
+                        data: modalConfirm.data
+                    });
+                }
+            break;
+            case 'documentPrint': 
+                if(modalConfirm.confirmed){    
+                    setModalAuthorization({
+                        action: 'documentPrint',
+                        title: 'Autorização',
+                        message: 'Reimpressão do documento.',
                         opened: true,
                         authorized: false,
                         buttonDenyText: 'Cancelar',
@@ -375,7 +413,7 @@ const App = () => {
             default:
             break;
         }
-    }
+    };
 
     const apiErrorMessage = (data) => {
         setModalMessage({
@@ -392,7 +430,7 @@ const App = () => {
         Api.post({script: 'document', action: 'cancel', data: data}).then((res) => {
             if(res.status === 200){
                 getBudgets();
-                setModalResponse({
+                setModalMessage({
                     class: 'success',
                     title: res.data.nNF,
                     message: 'Documento cancelado com sucesso!',
@@ -445,12 +483,14 @@ const App = () => {
                 if(printOE.opened){
                     setPrintOE({
                         budget: res.data,
-                        opened: true
+                        opened: true,
+                        reprint: printOE.reprint
                     });
                 } else if(printNFCe.opened){
                     setPrintNFCe({
                         budget: res.data,
-                        opened: true
+                        opened: true,
+                        reprint: printNFCe.reprint
                     });
                 } else{
                     setBudget(res.data);
@@ -507,7 +547,7 @@ const App = () => {
             terminal_operation_type: null,
             terminal_operation_value: 0
         });
-    }
+    };
 
     const terminalOperation = (data) => {
         setLoading(loading => loading+1);
@@ -570,10 +610,8 @@ const App = () => {
         Api.post({script: 'document', action: 'submit' + (budget.external_type === 'D' ? 'NFCe' : 'OE'), data: data}).then((res) => {
             if(res.status === 200){
                 getBudgets();
-                setModalMessage({
-                    class: 'success',
-                    title: res.data.NrDocumento,
-                    message: 'Documento faturado com sucesso!',
+                setModalSuccess({
+                    data: res.data,
                     opened: true
                 });
             } else {
@@ -688,7 +726,7 @@ const App = () => {
             modalMessage, setModalMessage,
             modalOpening, setModalOpening,
             modalPayment, setModalPayment,
-            modalResponse, setModalResponse,
+            modalSuccess, setModalSuccess,
             modalAuthorization, setModalAuthorization
         }}>
             <Header/>
@@ -705,6 +743,7 @@ const App = () => {
             <ModalMessage/>
             <ModalOpening/>
             <ModalPayment/>
+            <ModalSuccess/>
             <ModalAuthorization/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>

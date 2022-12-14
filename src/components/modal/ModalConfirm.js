@@ -1,5 +1,4 @@
-import React, {useContext}  from "react";
-
+import React, {useContext, useRef, useEffect}  from "react";
 
 import { BsQuestionCircle } from 'react-icons/bs';
 
@@ -9,6 +8,8 @@ import "./ModalConfirm.css";
 
 const ModalResponse = () => { 
     
+    const ref = useRef(null);
+
     const {modalConfirm, setModalConfirm} = useContext(Context);
     
     const handleModalClose = (canceled, confirmed) => {
@@ -24,6 +25,14 @@ const ModalResponse = () => {
         });
     }
 
+    useEffect(() => {
+        if(modalConfirm.opened){
+            setTimeout(() => {
+                ref.current.focus();
+            },300);
+        }
+    }, [modalConfirm]);
+
     return (
         <div className={`shadow ${modalConfirm.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
             <div className={`modal modal-confirm box-shadow`}>
@@ -37,7 +46,7 @@ const ModalResponse = () => {
                     <button onClick={() => handleModalClose(true, false)}>
                         {modalConfirm.buttonDenyText}
                     </button>
-                    <button onClick={() => handleModalClose(false, true)}>
+                    <button ref={ref} onClick={() => handleModalClose(false, true)}>
                         {modalConfirm.buttonConfirmText}
                     </button>
                 </div>

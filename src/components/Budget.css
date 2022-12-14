@@ -170,7 +170,7 @@
 
 .budget .controle button
 {
-    width: 30%;
+    width: 48%;
     padding: 20px;
     font-size: 18px;
     text-transform: uppercase;
@@ -178,5 +178,5 @@
 
 .budget .controle button:nth-child(2)
 {
-    margin: 0 5%;
+    float: right;
 }
