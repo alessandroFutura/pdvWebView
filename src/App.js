@@ -4,11 +4,11 @@ import moment from 'moment';
 import Api from './ServiceApi.js';
 import Context from './contexts/Context.js';
 
-import Header from './components/Header.js';
+import Bar from './components/Bar.js';
 import Tabs from './components/Tabs.js';
 import Budget from './components/Budget.js';
-import Bar from './components/Bar.js';
 import Footer from './components/Footer.js';
+import Header from './components/Header.js';
 import Loading from "./components/Loading.js";
 import PrintOE from './components/print/PrintOE.js';
 import PrintNFCe from './components/print/PrintNFCe.js';
