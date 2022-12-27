@@ -1,0 +1,10 @@
+1.3.0
+
+MELHORIAS
+- Negrito na impressão da NFC-e
+
+RECURSOS
+- Recurso de resetar o terminal
+- Proteção para edição do orçamento com instancia por usuario/terminal
+
+BUGS

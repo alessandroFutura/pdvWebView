@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect}  from "react";
+import React, {useContext}  from "react";
 
 import {AiOutlineFileText} from 'react-icons/ai';
 import moment from 'moment';
@@ -14,6 +14,7 @@ import "./ModalBudget.css";
 const ModalBudget = () => { 
     
     const {
+        instance_id,
         budget, 
         getBudget, 
         modalBudget,         
@@ -29,7 +30,7 @@ const ModalBudget = () => {
     };
     
     const handleCancelClick = () => {
-        if(!budget.document || budget.document.CdStatus < 9){
+        if((!budget.document || budget.document.CdStatus < 9) && !budget.instance){
             setModalConfirm({
                 id: 'budgetCancel',
                 message: 'Deseja realmente cancelar o faturamento?',
@@ -82,16 +83,19 @@ const ModalBudget = () => {
     };
 
     const updateButtonDisabled = () => {
+        console.log(budget)
         return (
             !budget.budget_id || 
-            (!!budget.document && budget.document.CdStatus >= 9)
+            (!!budget.document && budget.document.CdStatus >= 9) ||
+            (!!budget.instance && budget.instance.instance_id !== instance_id)
         );
     };
 
     const submitButtonDisabled = () => {
         return (
             !budget.budget_id || 
-            (!!budget.document && budget.document.CdStatus >= 9)
+            (!!budget.document && budget.document.CdStatus >= 9) ||
+            (!!budget.instance && budget.instance.instance_id !== instance_id)
         );
     };
 
@@ -99,7 +103,7 @@ const ModalBudget = () => {
         return (
             !budget.budget_id || 
             !budget.document ||
-            budget.document.CdStatus != 9
+            budget.document.CdStatus !== 9
         );
     };
 
@@ -225,7 +229,7 @@ const ModalBudget = () => {
                                         CEP: {budget.person.address.CdCEP}
                                     </>
                                 }
-                                {budget.external_type === 'D' || budget.budget_delivery === 'N' &&
+                                {(budget.external_type === 'D' || budget.budget_delivery === 'N') &&
                                     <i>Sem opção de entrega</i>
                                 }
                                 <button onClick={() => handleDeliveryNoteClick()}disabled={budget.external_type === 'D' || budget.budget_delivery === 'N'}>Observações de Entrega</button>                                

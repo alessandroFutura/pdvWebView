@@ -79,6 +79,13 @@ const App = () => {
                 chNFe: '',
                 nProt: '',
                 dhRecbto: ''
+            },
+            instance: {
+                instance_id: null,
+                user_name: null,
+                host_ip: null,
+                host_name: null,
+                budget_instance_date: null
             }
         };
     };
@@ -144,9 +151,9 @@ const App = () => {
             operation: null
         }
     };
-
-    //const instance = ('00000'+btoa(global.random(1000000,9999999)).toUpperCase().substr(0,10)).slice(-10);
     
+    const [instance_id] = useState(('00000'+window.btoa(parseInt(Math.random() * (9999999 - 1000000) + 1000000)).toUpperCase().substring(0,10)).slice(-10));
+
     const [config, setConfig] = useState(0);    
     const [loading, setLoading] = useState(0);
     const [budgets, setBudgets] = useState([]);
@@ -324,6 +331,11 @@ const App = () => {
                     afterGetTerminal();
                 }
             break;
+            case "emptyTerminal":
+                if(modalAuthorization.authorized){
+                    empty();
+                }
+            break;
             default: break;
         }
     };
@@ -347,10 +359,11 @@ const App = () => {
             break;
             case 'budgetCancel': 
                 if(modalConfirm.confirmed){
-                    initBudget();
+                    removeInstance();
                     setModalBudget({
                         opened: false
                     });
+                    initBudget();                    
                 }
             break;
             case 'closeTerminal':
@@ -418,6 +431,20 @@ const App = () => {
                     recoverBudget(modalConfirm.data);
                 }
             break;
+            case 'emptyTerminal':
+                if(modalConfirm.confirmed){
+                    setModalAuthorization({
+                        action: 'emptyTerminal',
+                        title: 'Autorização',
+                        message: 'Para limpar os dados do terminal será necessário a autorização.',
+                        opened: true,
+                        authorized: false,
+                        buttonDenyText: 'Cancelar',
+                        buttonConfirmText: 'Autorizar',
+                        data: {}
+                    });
+                }
+            break;
             default: break;
         }
     };
@@ -474,6 +501,10 @@ const App = () => {
             logoutAfter: params.logoutAfter || false
         });
     };
+
+    const empty = () => {
+        window.electronMessage('Unauthorized', 'appWindow');
+    };
     
     const getData = () => {
         setLoading(loading => loading+1);
@@ -495,7 +526,8 @@ const App = () => {
     const getBudget = (budget_id) => {
         setLoading(loading => loading+1);
         Api.post({script: 'budget', action: 'get', data: {
-            budget_id: budget_id
+            budget_id: budget_id,
+            instance_id: instance_id
         }}).then((res) => {
             if(res.status === 200){
                 if(printOE.opened){
@@ -510,8 +542,22 @@ const App = () => {
                         opened: true,
                         reprint: printNFCe.reprint
                     });
-                } else{
-                    setBudget(res.data);                                        
+                } else {
+                    setBudget(res.data);
+                    if(!!res.data.instance && res.data.instance.instance_id !== instance_id){
+                        setModalMessage({
+                            class: 'danger',
+                            message: (`
+                                Ops!<br/>
+                                O orçamento encontra-se aberto em outro terminal e por esse motivo, nao será possível editá-lo<br/><br/>
+                                <b>Usuário:</b> ${res.data.instance.user_name}<br/>
+                                <b>Terminal:</b> ${res.data.instance.host_name}<br/>
+                                <b>IP:</b> ${res.data.instance.host_ip}<br/>
+                                <b>Data:</b> ${res.data.instance.budget_instance_date}
+                            `),
+                            opened: true
+                        });
+                    }                                   
                 }                
             } else {
                 apiErrorMessage();
@@ -636,6 +682,15 @@ const App = () => {
                 });
             }
             setLoading(loading => loading-1);
+        });
+    };
+
+    const removeInstance = () => {
+        Api.post({script: 'budget', action: 'removeInstance', data: {
+            budget_id: budget.budget_id,
+            instance_id: instance_id
+        }}).then((res) => {
+            
         });
     };
 
@@ -787,6 +842,7 @@ const App = () => {
             time,
             user,
             config,
+            instance_id,
             budget, getBudget,
             budgets, setLoading,
             company, setCompany, 

@@ -24,7 +24,7 @@ const DataGridPayments = ({payments}) => {
 			return payments.sort((a, b) => {
 				let x = a[sortColumn];
 				let y = b[sortColumn];
-				if(sortColumn == 'VlParcela'){
+				if(sortColumn === 'VlParcela'){
 					x = parseFloat(x.replace(',','.'));
 					y = parseFloat(y.replace(',','.'));					
                 } else {

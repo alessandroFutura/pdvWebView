@@ -7,6 +7,7 @@ import 'moment/locale/pt-br';
 
 import { MdLogout } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
+import { RiDeleteBin2Line } from 'react-icons/ri';
 import { BiInfoCircle, BiPrinter, BiCodeAlt } from 'react-icons/bi';
 
 import Context from '../contexts/Context.js';
@@ -29,8 +30,6 @@ const Header = () => {
     const data = user.companies.map(
         item => ({label: `${item.company_code} - ${item.company_short_name.toUpperCase()}`, value: item.company_id})
     );
-
-    // const [openedToggle, setOpenedToggle] = useState(true);
 
     const handleButtonLogoutClick = () => {
         setModalConfirm({
@@ -100,6 +99,20 @@ const Header = () => {
         });
     };
 
+    const handleButtonEmptyClick = () => {
+        setModalConfirm({
+            id: 'emptyTerminal',
+            message: (`
+                Após limpar os dados do terminal será necessário recadastrá-lo para sua reutilização.
+                Deseja realmente realizar a operação?<br/>
+            `),
+            opened: true,
+            confirmed: false,
+            buttonDenyText: 'Não',
+            buttonConfirmText: 'Sim'
+        });
+    };
+
     return (
         <div className="header" id="header">
             <div className="container">
@@ -109,6 +122,7 @@ const Header = () => {
                     <button onClick={() => handlePostMessage('about')}><BiInfoCircle /></button>
                     <button onClick={() => handlePostMessage('selectPrinter')}><BiPrinter/></button>
                     <button onClick={() => handleButtonOpenDevToolsClick()}><BiCodeAlt/></button>
+                    <button onClick={() => handleButtonEmptyClick()}><RiDeleteBin2Line/></button>
                 </div>
                 <div className="filter">
                     <div className="grid reference">
