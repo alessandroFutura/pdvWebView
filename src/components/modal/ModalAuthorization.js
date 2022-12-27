@@ -83,7 +83,7 @@ const ModalAuthorization = () => {
     }
 
     return (
-        <div className={`shadow ${modalAuthorization.opened ? 'opened' : ''}`}>
+        <div className={`shadow shadow-modal ${modalAuthorization.opened ? 'opened' : ''}`}>
             <div className={`modal modal-authorization box-shadow`}>
                 <div className="header">
                     <FaUserLock/>

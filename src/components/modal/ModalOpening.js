@@ -39,7 +39,7 @@ const ModalOpening = () => {
     };
 
     return (
-        <div className={`shadow ${modalOpening.opened ? 'opened' : ''}`}>
+        <div className={`shadow shadow-modal ${modalOpening.opened ? 'opened' : ''}`}>
             <div className={`modal modal-opening box-shadow`}>
                 <div className="header">
                     <RiMoneyDollarCircleLine/>

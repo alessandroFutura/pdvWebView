@@ -6,7 +6,7 @@
     bottom: 0;
     margin: auto;
     position: absolute;
-    background-color: #fff;
+    background-color: #444;
 }
 
 .shadow .modal .header
@@ -40,6 +40,7 @@
     top: 60px;
     bottom: 60px;
     padding: 20px;
+    color: #fff;
     overflow-y: auto;
     position: absolute;    
 }
@@ -52,5 +53,10 @@
     height: 60px;
     padding: 20px;
     position: absolute;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #666;
+}
+
+.shadow .modal .footer button:disabled
+{
+    opacity: .75;
 }

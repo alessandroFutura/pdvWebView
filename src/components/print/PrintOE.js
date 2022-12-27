@@ -11,6 +11,7 @@ import Items from './oe/Items.js';
 import Footer from './oe/Footer.js';
 import Header from './oe/Header.js';
 import Person from './oe/Person.js';
+import Success from './oe/Success.js';
 import Payments from './oe/Payments.js';
 import Operation from './oe/Operation.js';
 import Signature from './oe/Signature.js';
@@ -33,19 +34,22 @@ const PrintOE = ({getEmptyBudget}) => {
     const handleClickClose = () => {
         setPrintOE({
             opened: false,
-            budget: getEmptyBudget()
+            budget: getEmptyBudget(),
+            getBudgets: true
         });
     };
 
     useLayoutEffect(() => {
-        console.log(printOE);
         if(printOE.opened && !!printOE.budget && !!printOE.budget.budget_id){
             buttonRef.current.focus();            
         }
     },[printOE]);
 
     return (
-        <div className={`shadow overflow-y ${printOE.opened ? 'opened' : ''}`}>
+        <div className={`shadow shadow-print overflow-y ${printOE.opened ? 'opened' : ''}`}>
+            {!printOE.reprint &&
+                <Success data={{NrDocumento: printOE.budget.document.NrDocumento}}/>
+            }
             {!!printOE.budget.budget_id &&
                 <div className={`print-oe ${printOE.reprint ? 'reprint' : ''}`}>
                     {printOE.budget.pages.map((page, key) => (
@@ -54,14 +58,14 @@ const PrintOE = ({getEmptyBudget}) => {
                                 <>
                                     <Signature data={{
                                         DtEmissao: printOE.budget.document.terminal_document_date, 
-                                        NrDocumento: printOE.budget.document.nNF
+                                        NrDocumento: printOE.budget.document.NrDocumento
                                     }}/>
                                     <hr/>
                                 </>
                             }
                             <Header data={{
                                 DtEmissao: printOE.budget.document.terminal_document_date, 
-                                NrDocumento: printOE.budget.document.nNF
+                                NrDocumento: printOE.budget.document.NrDocumento
                             }} company={company}/>
                             <Operation data={{
                                 TpDocumento: 'OE',

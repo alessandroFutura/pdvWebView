@@ -1,0 +1,54 @@
+.rs-table .rs-table-scrollbar-vertical
+{
+    display: none;
+}
+
+.rs-table .rs-table-row
+{
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    -webkit-touch-callout: none; /* iOS Saf60ari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.rs-table .rs-table-body-info
+{
+    color: #fff;
+}
+
+.rs-table .rs-table-row .rs-table-cell
+{
+    background-color: transparent;
+}
+
+.rs-table .rs-table-row:hover .rs-table-cell
+{
+    background-color: #666;
+}
+
+.rs-table .rs-table-row .rs-table-cell-header .rs-table-cell
+{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.rs-table .rs-table-row:hover .rs-table-cell-header .rs-table-cell
+{
+    background-color: #444;
+}
+
+.rs-table .rs-table-cell
+{
+    border-bottom: 1px solid #666;
+}
+
+.rs-table .rs-table-row-header,
+.rs-table .rs-table-row-header:hover .rs-table-cell-header .rs-table-cell
+{
+    background-color: #333;
+}

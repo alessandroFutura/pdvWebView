@@ -3,15 +3,76 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 40px 0;
+    padding: 60px 0 20px;
     position: absolute;
+}
+
+#footer .legend
+{
+    top: 10px;
+    position: absolute;
+}
+
+#footer .legend .item
+{
+    float: left;
+    margin-right: 10px;
+}
+
+#footer .legend .item span
+{
+    width: 16px;
+    float: left;
+    height: 16px;
+    display: block;
+    margin-right: 4px;
+    border-radius: 2px;
+}
+
+#footer .legend .item.opened
+{
+    color: #fff;
+}
+
+#footer .legend .item.opened span
+{
+    background-color: #fff;
+}
+
+#footer .legend .item.billed
+{
+    color: #8bc34a;
+}
+
+#footer .legend .item.billed span
+{
+    background-color: #8bc34a;
+}
+
+#footer .legend .item.rejected
+{
+    color: #ff5722;
+}
+
+#footer .legend .item.rejected span
+{
+    background-color: #ff5722;
+}
+
+#footer .legend .item.canceled
+{
+    color: gray;
+}
+
+#footer .legend .item.canceled span
+{
+    background-color: gray;
 }
 
 #footer .user .user-image,
 #footer .company .company-image
 {
     width: 64px;
-    float: left;
     height: 64px;
     border-radius: 4px;
     background-size: cover;
@@ -23,14 +84,20 @@
 #footer .user .user-name,
 #footer .company .company-name
 {
-    float: left;
     margin: 18px;
     color: #e6e6e6;
     font-size: 20px;
     font-weight: bold;
 }
 
-#footer .filters
+#footer .company .company-name,
+#footer .company .company-image
 {
-    
+    float: left;
+}
+
+#footer .user .user-name,
+#footer .user .user-image
+{
+    float: right;
 }

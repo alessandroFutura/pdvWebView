@@ -34,7 +34,7 @@ const ModalResponse = () => {
     }, [modalConfirm]);
 
     return (
-        <div className={`shadow ${modalConfirm.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
+        <div className={`shadow shadow-modal ${modalConfirm.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
             <div className={`modal modal-confirm box-shadow`}>
                 <div className="header">
                     <BsQuestionCircle/>

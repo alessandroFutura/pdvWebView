@@ -3,7 +3,6 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 128px;
     padding: 20px 0;
     position: absolute;
 }
@@ -25,26 +24,46 @@
     background-image: url(../assets/logo.png);
 }
 
-#header .container label
+#header .container .buttons
+{
+    right: 0;
+    top: 10px;
+    position: absolute;
+}
+
+#header .container .buttons button
+{
+    width: 42px;
+    height: 42px;
+    float: right;
+    padding: 6px;
+    color: #fff;
+    font-size: 26px;
+    margin-left: 10px;
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.2);
+}
+
+#header .container .filter
+{
+    float: left;
+    width: 952px;
+    padding-top: 58px;
+    margin-left: 20px;
+}
+
+#header .container .filter .grid
+{
+    float: left;
+    margin: 0 10px;
+}
+
+#header .container .filter .grid label
 {
     color: #fff;
 }
 
-#header .container .companies,
-#header .container .reference
-{
-    float: left;
-    margin-top: 58px;
-    margin-left: 38px;
-}
-
-#header .container .reference
-{
-    width: 138px;
-    margin-left: 30px;
-}
-
-#header .container .reference div[role="combobox"]
+#header .container .filter .grid.reference div[role="combobox"]
 {
     width: 134px;
     font-size: 16px;
@@ -97,61 +116,47 @@
     font-size: 16px;
 }
 
-#header .container button.refresh
+#header .container .filter .grid.toggle
 {
-    z-index: 1;
-    width: 48px;
-    left: 662px;
-    height: 48px;
-    padding: 8px;
-    color: #fff;
-    cursor: pointer;
-    margin: 6px 4px;
-    font-size: 28px;
-    position: absolute;
-    border-radius: 4px;
-    background-color: #22882d;
+    margin-top: 28px;
 }
 
-#header .container .toggles
-{
-    top: 16px;
-    left: 258px;
-    width: 458px;
-    position: absolute;
-}
-
-#header .container .toggles .toggle
-{
-    float: left;
-    width: 138px;
-    margin-right: 38px;
-}
-
-#header .container .toggles .toggle b
+#header .container .filter .grid.toggle b
 {
     top: 2px;
     color: #fff;
+    cursor: pointer;
     font-size: 18px;
     margin-left: 10px;
     position: relative;
 }
 
+#header .container .filter .grid.toggle .rs-toggle-checked .rs-toggle-presentation
+{
+    background-color: #4caf50;
+}
+
+#header .container .filter button
+{
+    width: 45px;
+    float: right;
+    height: 45px;
+    padding: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 28px;
+    margin-top: 20px;
+    border-radius: 4px;
+    background-color: #22882d;
+}
+
 #header .container .date
 {
-    float: right;
-    width: 446px;
+    right: 0;
+    bottom: -70px;
     font-size: 18px;
     color: #419744;
     font-weight: bold;
+    position: absolute;
     text-transform: uppercase;
-}
-
-#header .container .date button
-{
-    float: right;
-    color: #fff;
-    font-size: 26px;
-    border-radius: 50%;
-    background-color: transparent;
 }

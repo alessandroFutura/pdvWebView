@@ -1,0 +1,98 @@
+.tabs .tab .rs-table
+{
+    border-radius: 0 8px 8px;
+}
+
+.tabs .tab .rs-table.rs-table-hover .rs-table-row:not(.rs-table-row-header):hover
+{
+    background-color: #666;
+}
+
+.tabs .tab .rs-table .rs-table-row .rs-table-cell-first svg
+{
+    font-size: 24px;
+    margin-top: -2px;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-canceled
+{
+    color: gray;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-billed
+{
+    color: #8bc34a;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-rejected
+{
+    color: #ff5722;
+}
+
+.tabs .tab .rs-table .rs-table-row .rs-table-cell div.buttons
+{
+    margin-top: -5px;
+    text-align: center;
+}
+
+.tabs .tab .rs-table .rs-table-row .rs-table-cell div.buttons button
+{
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    display: none;
+    font-size: 16px;    
+    background-color: transparent;
+}
+
+.tabs .tab .rs-table .rs-table-row .rs-table-cell div.buttons button svg
+{
+    top: 1px;
+    position: relative;
+}
+
+.tabs .tab .rs-table .rs-table-row .rs-table-cell div.buttons button:nth-child(1)
+{
+    color: #ff9800;
+}
+
+.tabs .tab .rs-table .rs-table-row .rs-table-cell div.buttons button:nth-child(2),
+.tabs .tab .rs-table .rs-table-row .rs-table-cell div.buttons button:nth-child(3),
+.tabs .tab .rs-table .rs-table-row.row-rejected .rs-table-cell div.buttons button:nth-child(4)
+{
+    color: #ff5722;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-canceled .rs-table-cell div.buttons button:nth-child(4)
+{
+    color: #03a9f4;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-opened div.buttons button:nth-child(2)
+{
+    display: inline-block;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-billed div.buttons button:nth-child(1),
+.tabs .tab .rs-table .rs-table-row.row-billed div.buttons button:nth-child(3),
+.tabs .tab .rs-table .rs-table-row.row-canceling div.buttons button:nth-child(3)
+{
+    display: inline-block;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-canceled div.buttons button:nth-child(4),
+.tabs .tab .rs-table .rs-table-row.row-rejected div.buttons button:nth-child(4)
+{
+    display: inline-block;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-opened div.buttons button:nth-child(5)
+{
+    display: inline-block;
+}
+
+.tabs .tab .rs-table .rs-table-row.row-selected,
+.tabs .tab .rs-table .rs-table-row.row-selected .rs-table-cell
+{
+    background-color: #888;
+}

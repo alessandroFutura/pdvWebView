@@ -6,28 +6,31 @@ import Context from '../../contexts/Context.js';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import { BsFillStopFill } from 'react-icons/bs';
 import { BiMessageRoundedError } from 'react-icons/bi';
 import { FaPrint, FaRegTimesCircle, FaRegTrashAlt } from 'react-icons/fa';
 
-import "./DataGridDocument.css";
+import "./DataGridDocuments.css";
 
 const {Column, HeaderCell, Cell} = Table;
 
-const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
+const DataGridDocuments = ({columnBudgetTitle, dataRows, setDataRow}) => {
 
 	const [sortType, setSortType] = React.useState();
 	const [sortColumn, setSortColumn] = React.useState();
 
 	const dataColumns = [
-        {width:80, dataKey:'nNF', HeaderCell:'DOC'},
-        {width:250, dataKey:'NmCliente', HeaderCell:'CLIENTE'},
-        {width:100, dataKey:'external_code', HeaderCell:columnBudgetTitle},
-        {width:120, dataKey:'NmVendedor', HeaderCell:'VENDEDOR'},
-        {width:80, dataKey:'VlDocumento', HeaderCell:'VALOR'}
+        {dataKey:'NrDocumento', HeaderCell:'DOC'},
+        {dataKey:'NmUsuario', HeaderCell:'USUÁRIO'},
+        {dataKey:'NmCliente', HeaderCell:'CLIENTE'},
+        {dataKey:'external_code', HeaderCell:columnBudgetTitle},
+        {dataKey:'NmVendedor', HeaderCell:'VENDEDOR'},
+        {dataKey:'VlDocumento', HeaderCell:'VALOR'}
     ];
 
 	const {
-		budget_id, 
+		budget,
+		config,
 		setModalConfirm, setModalMessage
 	} = useContext(Context);
 
@@ -83,19 +86,61 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 	};
 
 	const handleButtonDeleteClick = (data) => {
-		console.log(data);
-	};
-
-	const handleButtonCancelClick = (data) => {
 		setModalConfirm({
-            id: 'documentCancel',
-            message: 'Deseja realmente cancelar o documento?',
+            id: 'documentRecover',
+            message: 'Deseja realmente recuperar o documento?',
             opened: true,
             confirmed: false,
             buttonDenyText: 'Não',
             buttonConfirmText: 'Sim',
 			data: data
         });
+	};
+
+	const getTimeoutText = (minutes) => {
+		if(minutes > 60){
+			//converter em horas
+			return `${parseInt(minutes/60)} horas`;
+		} else {
+			// minutos
+			return `${minutes} minutos`;
+		}
+	};
+
+	const handleButtonCancelClick = (data) => {
+		console.log(data);
+		let cancellationTimeout = 0;
+		if(data.modelo === 'OE'){
+			cancellationTimeout = parseInt(config.pdv.cancellationTimeoutOE);
+		} else {
+			cancellationTimeout = parseInt(config.pdv.cancellationTimeoutNFCe);
+		}
+		let timeOut = moment().diff(moment(data.dhRecbto || data.terminal_document_date), 'minutes');
+		if(timeOut > cancellationTimeout){
+			setModalMessage({
+				class: 'warning',
+				message: (`
+					Ops!<br/>
+					Não será possível cancelar o documento.<br/>
+					Tempo limite de <b>${getTimeoutText(cancellationTimeout)}</b> excedido!<br/>
+				`),
+				opened: true
+			});
+		} else {
+			setModalConfirm({
+				id: 'documentCancel',
+				message: (data.budget_credit === 'Y' ? (
+					'Atenção!<br/>' + 
+					'Este documento possui carta de crédito como pagamento.<br/>' +
+					'A carta de crédito será recuparada para que possa ser reutilizada em um novo orçamento.<br/><br/>'
+				) : '') + 'Deseja realmente cancelar o documento?',
+				opened: true,
+				confirmed: false,
+				buttonDenyText: 'Não',
+				buttonConfirmText: 'Sim',
+				data: data
+			});
+		}
 	};
 
 	const handleButtonInfoClick = (data) => {
@@ -116,7 +161,7 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 			if(data.NrDocumento === '--'){
 				classes.push('row-opened');
 			}
-			if(data.budget_id === budget_id){
+			if(data.budget_id === budget.budget_id){
 				classes.push('row-selected');
 			}
 			if(!!data.CdStatus){
@@ -142,22 +187,26 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 
 	return (
 		<Table
-			height={document.documentElement.clientHeight-370}
+			fillHeight={true}
 			data={getData()}
 			sortColumn={sortColumn}
-			sortType={sortType}
+			sortType={sortType}			
 			onSortColumn={handleSortColumn}
 			rowClassName={(data) => getRowClass(data)}
 			onRowClick={(rowData) => handleRowClick(rowData)}
 		>
+			<Column width={80} align="center" fixed="left">
+				<HeaderCell></HeaderCell>
+				<Cell><BsFillStopFill/></Cell>
+			</Column>
 			{(dataColumns || []).map((column, key) => (
-				<Column width={column.width} key={key} align="center" fixed sortable>
+				<Column key={key} flexGrow={1} align="center" fixed sortable>
 					<HeaderCell>{column.HeaderCell}</HeaderCell>
 					<Cell dataKey={column.dataKey} />
 				</Column>
 			))}
-			<Column width={80} fixed="right">
-				<HeaderCell>...</HeaderCell>
+			<Column width={80} align="center" fixed="right">
+				<HeaderCell></HeaderCell>
 				<Cell>
 					{rowData => (
 						<div className="buttons">
@@ -180,7 +229,7 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 								e.preventDefault(); 
 								e.stopPropagation();
 								handleButtonInfoClick(rowData);
-							}}><BiMessageRoundedError/></button>					
+							}}><BiMessageRoundedError/></button>	
 						</div>
 					)}
 				</Cell>
@@ -189,4 +238,4 @@ const DataGridDocument = ({columnBudgetTitle, dataRows, setDataRow}) => {
 	);
 }
 
-export default DataGridDocument;
+export default DataGridDocuments;

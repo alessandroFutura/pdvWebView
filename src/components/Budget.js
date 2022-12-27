@@ -63,7 +63,7 @@ const Budget = () => {
                 <p>SELECIONE UM DOCUMENTO PARA FATURAR</p>
             </div>
             <div style={{display:(budget.budget_id > 0 ? 'block' : 'none')}} className={`content box-shadow ${budget.external_type === 'D' ? 'dav' : 'pedido'}`}>
-                <div className="title-1">{!!budget.document ? `${budget.document.nNF} - ` : ''}{budget.external_type === 'D' ? 'Cupom Fiscal' : 'Ordem de Entrega'}</div>
+                <div className="title-1">{!!budget.document ? `${budget.document.NrDocumento} - ` : ''}{budget.external_type === 'D' ? 'Cupom Fiscal' : 'Ordem de Entrega'}</div>
                 <div className="seller">{budget.seller.CdChamada} - {budget.seller.NmPessoa}</div>
                 <div className="title-2">ITENS DO DOCUMENTO</div>
                 <div className="items">                    

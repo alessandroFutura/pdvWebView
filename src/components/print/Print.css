@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+.shadow-print .success
+{
+    margin: 20px;
+    padding: 20px;
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    background-color: #4caf50;
+}
+
 .button-print,
 .button-print-close
 {
@@ -38,7 +48,9 @@
     .body,
     button,
     #header,
-    #footer
+    #footer,
+    .success,
+    .shadow-modal
     {
         display: none !important;
     }

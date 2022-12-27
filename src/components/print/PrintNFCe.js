@@ -7,6 +7,8 @@ import {FaPrint,FaTimes} from 'react-icons/fa';
 
 import moment from 'moment';
 
+import Success from './oe/Success.js';
+
 import "./PrintNFCe.css";
 
 const printNFCe = ({getEmptyBudget}) => { 
@@ -30,7 +32,8 @@ const printNFCe = ({getEmptyBudget}) => {
     const handleClickClose = () => {
         setPrintNFCe({
             opened: false,
-            budget: getEmptyBudget()
+            budget: getEmptyBudget(),
+            getBudgets: true
         });
     };
 
@@ -41,8 +44,11 @@ const printNFCe = ({getEmptyBudget}) => {
     },[printNFCe]);
 
     return (
-        <div className={`shadow overflow-y ${printNFCe.opened ? 'opened' : ''}`}>
-            <div className="print-nfce">
+        <div className={`shadow shadow-print overflow-y ${printNFCe.opened ? 'opened' : ''}`}>
+            {!printNFCe.reprint &&
+                <Success data={{NrDocumento: printNFCe.budget.document.NrDocumento}}/>
+            }
+            <div className="print-nfce">                
                 <div className="company-name">{company.company_name}</div>
                 <div className="company-document">CNPJ: {company.external.NrCGC}</div>
                 <div className="address">
@@ -124,7 +130,7 @@ const printNFCe = ({getEmptyBudget}) => {
                         </table>
                         <div className="divider"></div>                        
                         <div className="nfce-info">
-                            <b>NFC-e: {printNFCe.budget.document.nNF} Série: {printNFCe.budget.document.serie} Emissão {moment(printNFCe.budget.document.dhRecbto).format('DD/MM/YYYY')}</b><br/>
+                            <b>NFC-e: {printNFCe.budget.document.NrDocumento} Série: {printNFCe.budget.document.serie} Emissão {moment(printNFCe.budget.document.dhRecbto).format('DD/MM/YYYY')}</b><br/>
                             Consulte pela chave de acesso em:<br/>
                             http://www.fazenda.rj.gov.br/nfce/consulta<br/>
                             {printNFCe.budget.document.chNFe.substring(0,4)}&nbsp;
@@ -148,8 +154,8 @@ const printNFCe = ({getEmptyBudget}) => {
                                 {!printNFCe.budget.person.StConsumidor && !!printNFCe.budget.person.address && 
                                     <React.Fragment>
                                         <br/>{printNFCe.budget.person.address.NmLogradouro}, {printNFCe.budget.person.address.NrLogradouro}
-                                        <br/>{printNFCe.budget.person.address.NmBairro} - ${printNFCe.budget.person.address.NmCidade} - ${printNFCe.budget.person.address.IdUF}
-                                        <br/>CEP: ${printNFCe.budget.person.address.CdCEP}
+                                        <br/>{printNFCe.budget.person.address.NmBairro} - {printNFCe.budget.person.address.NmCidade} - {printNFCe.budget.person.address.IdUF}
+                                        <br/>CEP: {printNFCe.budget.person.address.CdCEP}
                                     </React.Fragment>
                                 }                        
                         </div>

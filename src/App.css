@@ -78,13 +78,18 @@ button.btn:disabled
     display: none;
     position: fixed;
     transition: all .3s ease;
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.75);
 }
 
 .shadow.opened
 {
     opacity: 1;
     display: block;
+}
+
+.shadow.shadow-print
+{
+    z-index: 15;
 }
 
 .overflow-y

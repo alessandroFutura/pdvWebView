@@ -2,7 +2,7 @@ import React, {useEffect, useState, useContext} from "react";
 
 import Context from '../contexts/Context.js';
 import {numberFormat} from '../contexts/Global.js';
-import DataGridDocument from './grid/DataGridDocument.js';
+import DataGridDocument from './grid/DataGridDocuments.js';
 
 import "./Tabs.css";
 
@@ -18,7 +18,7 @@ const Tabs = ({initBudget}) => {
     const [pedidos, setPedidos] = useState([]);
     const [dataRow, setDataRow] = useState({});
     
-    const {budgets, setBudgetId} = useContext(Context);
+    const {budgets, getBudget} = useContext(Context);
 
     useEffect(() => {
         initBudget();
@@ -49,7 +49,7 @@ const Tabs = ({initBudget}) => {
 
     useEffect(() => {
         if(!!dataRow.budget_id){
-            setBudgetId(dataRow.budget_id);
+            getBudget(dataRow.budget_id);
             setDataRow({});
         }
     }, [dataRow]);

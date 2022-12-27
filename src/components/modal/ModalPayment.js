@@ -33,7 +33,7 @@ const ModalPayment = () => {
     };    
 
     return (
-        <div className={`shadow ${modalPayment.opened ? 'opened' : ''}`}>
+        <div className={`shadow shadow-modal ${modalPayment.opened ? 'opened' : ''}`}>
             <div className="modal modal-payment box-shadow">
                 <div className="header">
                     <MdAttachMoney/>

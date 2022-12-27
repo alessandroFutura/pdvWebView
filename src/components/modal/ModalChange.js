@@ -63,7 +63,7 @@ const ModalChange = () => {
     }
 
     return (
-        <div className={`shadow ${modalChange.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
+        <div className={`shadow shadow-modal ${modalChange.opened ? 'opened' : ''}`} style={{zIndex: 11}}>
             <div className={`modal modal-change box-shadow`}>
                 <div className="header">
                     <RiExchangeDollarFill/>

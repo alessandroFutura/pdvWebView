@@ -1,0 +1,262 @@
+.shadow .modal.modal-budget
+{
+    width: 1024px;
+    height: 760px;
+}
+
+.shadow .modal.modal-budget .header
+{
+    height: 100px; 
+}
+
+.shadow .modal.modal-budget.modal-budget-opened .header
+{
+    color: #333;
+    background-color: #fff;
+}
+
+.shadow .modal.modal-budget.modal-budget-canceled .header
+{
+    background-color: #333;
+}
+
+.shadow .modal.modal-budget.modal-budget-billed .header
+{
+    background-color: #4caf50;
+}
+
+.shadow .modal.modal-budget.modal-budget-rejected .header
+{
+    background-color: #f44336;
+}
+
+.shadow .modal.modal-budget .header svg
+{
+    float: left;
+    font-size: 60px;
+}
+
+.shadow .modal.modal-budget .header .document-code
+{
+    float: left;    
+}
+
+.shadow .modal.modal-budget .header .document-state
+{
+    float: right;
+    display: none;
+}
+
+.shadow .modal.modal-budget .header .document-code,
+.shadow .modal.modal-budget .header .document-state
+{
+    font-size: 24px;
+    margin: 20px 10px 6px;
+}
+
+.shadow .modal.modal-budget.modal-budget-opened .header .document-state-opened,
+.shadow .modal.modal-budget.modal-budget-billed .header .document-state-billed,
+.shadow .modal.modal-budget.modal-budget-canceled .header .document-state-canceled,
+.shadow .modal.modal-budget.modal-budget-rejected .header .document-state-rejected
+{
+    display: block;
+}
+
+.shadow .modal.modal-budget .body
+{
+    top: 100px;
+    bottom: 88px;
+    padding: 20px 40px;
+}
+
+.shadow .modal.modal-budget .body .top
+{
+    height: 64px;
+    margin-bottom: 20px;    
+}
+
+.shadow .modal.modal-budget .body .top label
+{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.shadow .modal.modal-budget .body .top .seller
+{
+    text-align: right;
+}
+
+.shadow .modal.modal-budget .body .top .person,
+.shadow .modal.modal-budget .body .top .seller
+{
+    width: 50%;
+    float: left;
+    height: 84px;
+}
+
+.shadow .modal.modal-budget .body .top .person .person-image
+{
+    float: left;
+    margin-right: 10px;
+}
+
+.shadow .modal.modal-budget .body .top .seller .seller-image
+{
+    float: right;
+    margin-left: 10px;
+}
+
+.shadow .modal.modal-budget .body .top .person .person-image,
+.shadow .modal.modal-budget .body .top .seller .seller-image
+{
+    width: 54px;    
+    height: 54px;
+    display: none;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+.shadow .modal.modal-budget .body .top .person .person-code,
+.shadow .modal.modal-budget .body .top .seller .seller-code
+{
+    margin-top: 0;
+}
+
+.shadow .modal.modal-budget .body .top .person .person-name,
+.shadow .modal.modal-budget .body .top .seller .seller-name
+{
+    font-size: 18px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.shadow .modal.modal-budget .body .items,
+.shadow .modal.modal-budget .body .bottom .delivery,
+.shadow .modal.modal-budget .body .bottom .payments
+{
+    border: 1px solid #666;
+}
+
+.shadow .modal.modal-budget .body .resume
+{
+    height: 54px;
+    border-left: 1px solid #666;
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #666;
+}
+
+.shadow .modal.modal-budget .body .resume .item
+{
+    width: 20%;
+    float: left;
+    padding: 8px 10px;
+    text-align: center;
+}
+
+.shadow .modal.modal-budget .body .resume .item:not(:last-child)
+{
+    border-right: 1px solid #666;
+}
+
+.shadow .modal.modal-budget .body .resume .item .label
+{
+    color: gray;
+    font-size: 12px;
+}
+
+.shadow .modal.modal-budget .body .resume .item .value
+{
+    font-weight: bold;
+}
+
+.shadow .modal.modal-budget .body .resume .item:nth-child(1)
+{
+    text-align: left;
+}
+
+.shadow .modal.modal-budget .body .resume .item:nth-child(5)
+{
+    text-align: right;
+}
+
+.shadow .modal.modal-budget .body .bottom
+{
+    margin-top: 10px;
+}
+
+.shadow .modal.modal-budget .body .bottom .payments
+{
+    float: left;
+    width: 620px;
+}
+
+.shadow .modal.modal-budget .body .bottom .delivery
+{
+    float: right;
+    width: 305px;
+    height: 166px;
+    padding: 15px;
+    font-size: 16px;
+    position: relative;
+}
+
+.shadow .modal.modal-budget .body .bottom .delivery label
+{
+    display: block;
+    margin-bottom: 10px;
+}
+
+.shadow .modal.modal-budget .body .bottom .delivery button
+{
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    color: #ff9800;
+    position: absolute;
+    background-color: transparent;
+}
+
+.shadow .modal.modal-budget .footer
+{
+    height: 88px;
+    padding: 20px;
+    text-align: center;
+}
+
+.shadow .modal.modal-budget .footer button
+{
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    text-transform: uppercase;    
+}
+
+.shadow .modal.modal-budget .footer button:nth-child(1)
+{
+    float: left;
+    background-color: #f44336;
+}
+
+.shadow .modal.modal-budget .footer button:nth-child(2)
+{
+    float: right;
+    margin-left: 20px;
+    background-color: #4caf50;
+}
+
+.shadow .modal.modal-budget .footer button:nth-child(3)
+{
+    float: right;
+    margin-left: 20px;
+    background-color: #03a9f4;
+}
+
+.shadow .modal.modal-budget .footer button:nth-child(4)
+{
+    float: right;
+    background-color: #ff9800;
+}

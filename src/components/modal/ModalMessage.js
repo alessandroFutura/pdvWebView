@@ -22,7 +22,7 @@ const ModalMessage = () => {
     };
 
     return (
-        <div style={{zIndex: 11}} className={`shadow ${modalMessage.opened ? 'opened' : ''}`}>
+        <div style={{zIndex: 11}} className={`shadow shadow-modal ${modalMessage.opened ? 'opened' : ''}`}>
             <div className={`modal modal-message box-shadow ${modalMessage.class}`}>
                 <div className="header">
                     <FiInfo/>

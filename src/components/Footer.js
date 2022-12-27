@@ -11,6 +11,12 @@ const Footer = () => {
     return (
         <div id="footer">
             <div className="container">
+                <div className="legend">
+                    <div className="item opened"><span></span>Aberto</div>
+                    <div className="item billed"><span></span>Faturado</div>
+                    <div className="item rejected"><span></span>Rejeitado</div>
+                    <div className="item canceled"><span></span>Cancelado</div>
+                </div>
                 <div className="company">
                     <div className="company-image" style={{backgroundImage: `url(${company.image})`}}></div>
                     <div className="company-name">{company.company_code} - {company.company_short_name.toUpperCase()}</div>

@@ -55,7 +55,7 @@ const ModalSuccess = () => {
     }, [modalSuccess]);
 
     return (
-        <div className={`shadow ${modalSuccess.opened ? 'opened' : ''}`}>
+        <div className={`shadow shadow-modal ${modalSuccess.opened ? 'opened' : ''}`}>
             <div className="modal modal-success box-shadow">
                 <div className="header">
                     <BsCheck2Circle/>

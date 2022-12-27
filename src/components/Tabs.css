@@ -1,19 +1,19 @@
 .tabs
 {
     top: 0;
+    left: 0;
+    right: 0;
     bottom: 0;
     z-index: 1;
-    width: 714px;
     position: absolute;
 }
 
 .tabs button.btn
 {
-    color: #333;
+    color: #fff;
     padding: 12px;
     font-weight: bold;
     position: absolute;
-    background-color: #fff;
 }
 
 .tabs button.btn:nth-child(2)
@@ -28,6 +28,36 @@
     top: 38px;
     bottom: 0;
     position: absolute;
-    border-radius: 0 8px 8px;
-    background-color: #fff;
+    border-radius: 0 8px 8px;    
+}
+
+.tabs .tab
+{
+    background-color: #444;
+}
+
+.tabs button:nth-child(1),
+.tabs .tab:nth-child(3) .rs-table-row-header,
+.tabs .tab:nth-child(3) .rs-table-row-header:hover .rs-table-cell-header .rs-table-cell
+{
+    color: #fff;
+    background-color: #4caf50;
+}
+
+.tabs .tab:nth-child(1) .rs-table-cell-header-icon-sort
+{
+    color: #666;
+}
+
+.tabs button:nth-child(2),
+.tabs .tab:nth-child(4) .rs-table-row-header,
+.tabs .tab:nth-child(4) .rs-table-row-header:hover .rs-table-cell-header .rs-table-cell
+{
+    color: #fff;
+    background-color: #1b5e20;
+}
+
+.tabs .tab .rs-table-cell-header-icon-sort
+{
+    color: #fff;
 }

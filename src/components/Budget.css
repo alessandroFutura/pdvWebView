@@ -156,7 +156,12 @@
 .budget .content .rodape .info span
 {
     float: right;
+    width: 106px;
+    overflow: hidden;
+    text-align: right;
     font-weight: bold;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .budget .controle
