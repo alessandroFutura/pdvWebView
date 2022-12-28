@@ -83,7 +83,6 @@ const ModalBudget = () => {
     };
 
     const updateButtonDisabled = () => {
-        console.log(budget)
         return (
             !budget.budget_id || 
             (!!budget.document && budget.document.CdStatus >= 9) ||

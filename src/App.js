@@ -30,6 +30,7 @@ const App = () => {
     useEffect(() => {
         getData();
         printing();
+        removeInstanceBeforeClose();
         setInterval(() => setTime(moment().format('HH:mm')), 1000);
     },[]);
 
@@ -685,13 +686,29 @@ const App = () => {
         });
     };
 
-    const removeInstance = () => {
+    const removeInstance = (removeInstanceBeforeClose=false) => {
         Api.post({script: 'budget', action: 'removeInstance', data: {
-            budget_id: budget.budget_id,
+            budget_id: budget.budget_id || null,
             instance_id: instance_id
-        }}).then((res) => {
-            
+        }}).then(() => {
+            if(removeInstanceBeforeClose){
+                window.electronMessage('closeAfterRemoveInstance');
+            }
+        }).catch(() => {
+            if(removeInstanceBeforeClose){
+                window.electronMessage('closeAfterRemoveInstance');
+            }
         });
+    };
+
+    const removeInstanceBeforeClose = () => {
+        try{
+            window.require('electron').ipcRenderer.on('removeInstanceBeforeClose', (e) => {
+                removeInstance(1);    
+            });
+        } catch(e){
+            
+        }
     };
 
     const showLoading = () => {
