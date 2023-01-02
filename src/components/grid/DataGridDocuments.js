@@ -108,7 +108,6 @@ const DataGridDocuments = ({columnBudgetTitle, dataRows, setDataRow}) => {
 	};
 
 	const handleButtonCancelClick = (data) => {
-		console.log(data);
 		let cancellationTimeout = 0;
 		if(data.modelo === 'OE'){
 			cancellationTimeout = parseInt(config.pdv.cancellationTimeoutOE);

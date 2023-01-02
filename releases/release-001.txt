@@ -1,4 +1,4 @@
-1.5.0
+1.6.0
 
 MELHORIAS
 - Negrito na impressão da NFC-e
@@ -8,3 +8,4 @@ MELHORIAS
 RECURSOS
 - Recurso de resetar o terminal
 - Proteção para edição do orçamento com instancia por terminal
+- Opção de trocar a forma de pagamento da parcela

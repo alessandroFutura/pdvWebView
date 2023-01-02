@@ -128,6 +128,10 @@ const ModalBudget = () => {
         budget.payments.forEach(payment => {
             payments.push({
                 NrDias: payment.external.NrDias,
+                IdFormaPagamento: payment.modality_id,
+                budget_payment_id: payment.budget_payment_id,
+                modality_group_id: payment.modality_group_id,
+                modality_group_description: payment.modality_group_description,
                 NrParcelas: `${payment.budget_payment_installment}x`,
                 DtVencimento: moment(payment.budget_payment_deadline).format('DD/MM/YYYY'),
                 DsFormaPagamento: payment.external.DsFormaPagamento,
@@ -216,7 +220,7 @@ const ModalBudget = () => {
                         </div>
                         <div className="bottom">
                             <div className="payments">
-                                <DataGridPayments payments={getPayments()}/>
+                                <DataGridPayments payments={getPayments()} editable={submitButtonDisabled()} />
                             </div>
                             <div className="delivery">
                                 <label>Entrega</label>

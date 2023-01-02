@@ -16,8 +16,8 @@ import ModalChange from "./components/modal/ModalChange.js";
 import ModalConfirm from "./components/modal/ModalConfirm.js";
 import ModalMessage from "./components/modal/ModalMessage.js";
 import ModalOpening from "./components/modal/ModalOpening.js";
-import ModalPayment from "./components/modal/ModalPayment.js";
 import ModalSuccess from "./components/modal/ModalSuccess.js";
+import ModalPayment from "./components/modal/ModalPayment.js";
 import ModalAuthorization from "./components/modal/ModalAuthorization.js";
 
 import './App.css';
@@ -247,7 +247,10 @@ const App = () => {
     });
 
     const [modalPayment, setModalPayment] = useState({
-        opened: false
+        opened: false,
+        actual: null,
+        selected: null,
+        modalities: null
     });
 
     const afterGetTerminal = () => {
@@ -446,6 +449,11 @@ const App = () => {
                     });
                 }
             break;
+            case "modalityChange":
+                if(modalConfirm.confirmed){
+                    editPayment();
+                }
+            break;
             default: break;
         }
     };
@@ -500,6 +508,28 @@ const App = () => {
             terminal_operation_value: 0,
             openAfter: params.openAfter || false,
             logoutAfter: params.logoutAfter || false
+        });
+    };
+
+    const editPayment = () => {
+        setLoading(loading => loading+1);
+        Api.post({script: 'modality', action: 'edit', data: {
+            budget_id: budget.budget_id,
+            actual: modalPayment.actual,
+            selected: modalPayment.selected
+        }}).then((res) => {
+            if(res.status === 200){
+                getBudget(budget.budget_id);
+                setModalPayment({
+                    opened: false,
+                    actual: null,
+                    selected: null,
+                    modalities: null
+                });           
+            } else {
+                apiErrorMessage();
+            }
+            setLoading(loading => loading-1);
         });
     };
 
@@ -560,6 +590,25 @@ const App = () => {
                         });
                     }                                   
                 }                
+            } else {
+                apiErrorMessage();
+            }
+            setLoading(loading => loading-1);
+        });
+    };
+
+    const getModalityGroup = (data) => {
+        setLoading(loading => loading+1);
+        Api.post({script: 'modality', action: 'getModalityGroup', data: {
+            modality_group_id: data.modality_group_id
+        }}).then((res) => {
+            if(res.status === 200){                 
+                setModalPayment({
+                    opened: true,
+                    actual: data,
+                    selected: null,
+                    modalities: res.data
+                });          
             } else {
                 apiErrorMessage();
             }
@@ -864,7 +913,7 @@ const App = () => {
             budgets, setLoading,
             company, setCompany, 
             filters, setFilters,
-            printOE, setPrintOE,            
+            printOE, setPrintOE,                     
             printNFCe, setPrintNFCe,
             modalChange, setModalChange,
             modalBudget, setModalBudget,
@@ -873,7 +922,8 @@ const App = () => {
             modalOpening, setModalOpening,
             modalPayment, setModalPayment,
             modalSuccess, setModalSuccess,
-            modalAuthorization, setModalAuthorization
+            modalAuthorization, setModalAuthorization,
+            getModalityGroup
         }}>
             <Header/>
             <div className="body">
@@ -890,6 +940,7 @@ const App = () => {
             <ModalOpening/>
             <ModalPayment/>
             <ModalSuccess/>
+            <ModalPayment/>
             <ModalAuthorization/>
             <Loading loadingStyle={loadingStyle}/>
         </Context.Provider>

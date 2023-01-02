@@ -1,15 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 
 import {Table} from 'rsuite';
+import Context from '../../contexts/Context.js';
+
+import { FaEdit } from 'react-icons/fa';
 
 import "./DataGridPayments.css";
 
 const {Column, HeaderCell, Cell} = Table;
 
-const DataGridPayments = ({payments}) => {
+const DataGridPayments = ({payments, editable}) => {
 
     const [sortType, setSortType] = useState();
 	const [sortColumn, setSortColumn] = useState();
+
+	const {setModalMessage, getModalityGroup} = useContext(Context);
 
 	const dataColumns = [
         {dataKey:'NrParcelas', HeaderCell:''},
@@ -50,6 +55,22 @@ const DataGridPayments = ({payments}) => {
 		setSortType(sortType);
 	};
 
+	const handleButtonEditClick = (rowData) => {
+		if(!!rowData.modality_group_id){
+			getModalityGroup(rowData);
+		} else {
+			setModalMessage({
+				class: 'warning',
+				message: (`
+					Ops!<br/>
+					Não será possível editar a parcela.<br/>
+					A forma de pagamento <b>${rowData.DsFormaPagamento}</b> não está incluida em nenhum grupo de modalidade.
+				`),
+				opened: true
+			});	
+		}
+	};
+
     return (
 		<Table
 			height={164}
@@ -64,6 +85,18 @@ const DataGridPayments = ({payments}) => {
 					<Cell dataKey={column.dataKey} />
 				</Column>
 			))}
+			<Column width={60} align="center" fixed="right">
+				<HeaderCell></HeaderCell>
+				<Cell>
+					{rowData => (
+						<button disabled={editable} onClick={(e) => {
+							e.preventDefault(); 
+							e.stopPropagation();
+							handleButtonEditClick(rowData);
+						}}><FaEdit/></button>
+					)}
+				</Cell>
+			</Column>
 		</Table>
 	);
 

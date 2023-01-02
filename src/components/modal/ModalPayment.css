@@ -1,7 +1,7 @@
 .shadow .modal.modal-payment
 {
-    width: 888px;
-    height: 640px;
+    width: 440px;
+    height: 448px;
 }
 
 .shadow .modal.modal-payment .header
@@ -9,206 +9,67 @@
     height: 100px;
     font-size: 60px;
     text-align: center;
-    background-color: #4caf50;
+    background-color: #03a9f4;
 }
 
 .shadow .modal.modal-payment .body
 {
     top: 100px;
+    padding: 0;
     bottom: 88px;
-    padding: 40px;
 }
 
-.shadow .modal.modal-payment .body .left
+.shadow .modal.modal-payment .body .modality
 {
-    float: left;
-    width: 488px;
-}
-
-.shadow .modal.modal-payment .body .left .term
-{
-    padding: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    background-color: #e7e7e7;
-}
-
-.shadow .modal.modal-payment .body .left .payments
-{
-    height: 150px;
-    overflow-y: auto;
-}
-
-.shadow .modal.modal-payment .body .left .payments .payment
-{
+    width: 100%;
+    padding: 20px;
     display: table;
+    position: relative;
 }
 
-.shadow .modal.modal-payment .body .left .payments .payment .icon
+.shadow .modal.modal-payment .body .modality img
 {
-    width: 56px;
     float: left;
-    height: 36px;
+    max-width: 68px;
     border-radius: 4px;
-    background-size: cover;
 }
 
-.shadow .modal.modal-payment .body .left .payments .payment .value,
-.shadow .modal.modal-payment .body .left .payments .payment .deadline,
-.shadow .modal.modal-payment .body .left .payments .payment .description
+.shadow .modal.modal-payment .body .modality span
 {
     float: left;
-    font-size: 16px;
-    padding: 8px 15px;
+    margin: 10px;
+    font-size: 18px;
+    text-transform: uppercase;
 }
 
-.shadow .modal.modal-payment .body .left .payments .payment .description
+.shadow .modal.modal-payment .body .modality svg
 {
-    width: 184px;
-}
-
-.shadow .modal.modal-payment .body .left .payments .payment .deadline
-{
-    width: 120px;
-    text-align: center;
-}
-
-.shadow .modal.modal-payment .body .left .payments .payment .value
-{
-    width: 88px;
-    text-align: center;
-}
-
-.shadow .modal.modal-payment .body .left .payments .payment button
-{
-    float: left;
-    font-size: 20px;
-    color: #03a9f4;
-    padding: 8px 10px 0px;
-    background-color: transparent;
-}
-
-.shadow .modal.modal-payment .body .left .payments .payment:not(:last-child)
-{
-    margin-bottom: 10px;
-}
-
-.shadow .modal.modal-payment .body .left .notes .note
-{
-    float: left;    
-}
-
-.shadow .modal.modal-payment .body .left .notes .note:nth-child(1)
-{
-    width: 300px;
-    margin-right: 10px;
-}
-
-.shadow .modal.modal-payment .body .left .notes .note:nth-child(2)
-{
-    width: 168px;
-    margin-left: 10px;
-}
-
-.shadow .modal.modal-payment .body .left .notes .note .title
-{
-    font-size: 16px;
+    top: 0;
+    bottom: 0;
+    right: 20px;
+    display: none;
+    margin: auto 0;
+    font-size: 28px;
     color: #4caf50;
-    text-transform: uppercase;
+    position: absolute;
 }
 
-.shadow .modal.modal-payment .body .left .notes .note .text
+.shadow .modal.modal-payment .body .modality:hover,
+.shadow .modal.modal-payment .body .modality.selected
 {
-    width: 100%;
-    height: 112px;
-    padding: 15px;
-    overflow-y: auto;
-    background-color: #e7e7e7;
+    cursor: pointer;
+    background-color: #222;
 }
 
-.shadow .modal.modal-payment .body .right
+.shadow .modal.modal-payment .body .modality:hover svg,
+.shadow .modal.modal-payment .body .modality.selected svg
 {
-    width: 300px;
-    float: right;
+    display: block;
 }
 
-.shadow .modal.modal-payment .body .right .title
+.shadow .modal.modal-payment .body .modality:not(:last-child)
 {
-    color: #fff;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
-    background-color: #4caf50;
-}
-
-.shadow .modal.modal-payment .body .right .data
-{
-    width: 100%;
-    height: 242px;
-    padding: 15px;
-    font-size: 16px;
-    background-color: #e7e7e7;
-}
-
-.shadow .modal.modal-payment .body .right .data .label,
-.shadow .modal.modal-payment .body .right .data .value
-{
-    width: 50%;
-    padding: 10px;
-}
-
-.shadow .modal.modal-payment .body .right .data .label
-{
-    
-    float: left;
-    text-align: right;
-}
-
-.shadow .modal.modal-payment .body .right .data .value
-{
-    float: right;    
-    text-align: left;
-}
-
-.shadow .modal.modal-payment .body .right .seller
-{
-    display: table;
-    margin-bottom: 20px;
-}
-
-.shadow .modal.modal-payment .body .right .seller .image
-{
-    width: 54px;
-    float: left;
-    height: 54px;
-    border-radius: 50%;
-    background-size: cover;
-}
-
-.shadow .modal.modal-payment .body .right .seller .code
-{
-    float: left;
-    color: gray;
-    font-size: 16px;
-    margin-top: 5px;
-    margin-left: 12px;
-}
-
-.shadow .modal.modal-payment .body .right .seller .name
-{
-    float: left;
-    width: 228px;
-    font-size: 18px;
-    overflow: hidden;
-    font-weight: bold;
-    margin-left: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    border-bottom: 1px solid #333;
 }
 
 .shadow .modal.modal-payment .footer
@@ -236,5 +97,5 @@
 .shadow .modal.modal-payment .footer button:nth-child(2)
 {
     float: right;
-    background-color: #4caf50;
+    background-color: #03a9f4;
 }
